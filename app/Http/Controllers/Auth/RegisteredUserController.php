@@ -28,45 +28,28 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
-    {
-        // 🔹 Validación única
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-                'unique:users',
-                'regex:/^[A-Za-z0-9._%+-]+@pascualbravo\.edu\.co$/i', // 👈 solo institucional
-            ],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        'password' => ['required', 'confirmed', 'min:8'],
+        'roles' => ['required', 'array', 'min:1'],
+    ]);
 
-        // 🔹 Crear usuario
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+    ]);
 
-        // 🔹 Asignar rol automáticamente según el correo
-        if (preg_match('/[0-9]+@pascualbravo\.edu\.co$/i', $user->email)) {
-            // contiene números → estudiante
-            $user->role_id = Role::where('name', 'estudiante')->first()->id;
-        } else {
-            // no contiene números → profesor
-            $user->role_id = Role::where('name', 'profesor')->first()->id;
-        }
-
-        $user->save();
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+    // Asignar roles seleccionados
+    foreach ($request->roles as $roleName) {
+        $user->assignRole($roleName);
     }
+
+    Auth::login($user);
+
+return redirect()->route('dashboard.selector');
+}
 }

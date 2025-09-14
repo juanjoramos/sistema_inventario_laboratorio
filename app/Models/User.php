@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,7 +15,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id', // Relación con roles
     ];
 
     protected $hidden = [
@@ -27,36 +27,41 @@ class User extends Authenticatable
     ];
 
     /**
-     * Relación con la tabla roles
+     * Relación muchos a muchos con Role.
      */
-    public function role()
+    public function roles()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsToMany(Role::class, 'role_user')->withTimestamps();
     }
 
     /**
-     * Accesor para obtener el nombre del rol directamente
+     * Verifica si el usuario tiene un rol específico.
      */
-    public function getRoleNameAttribute()
+    public function hasRole(string $role): bool
     {
-        return $this->role ? $this->role->name : null;
+        return $this->roles->contains('name', $role);
     }
 
     /**
-     * Asignar rol automáticamente según el correo institucional
+     * Asigna un rol al usuario si no lo tiene.
      */
-    protected static function booted()
+    public function assignRole(string $roleName)
     {
-        static::creating(function ($user) {
-            $email = $user->email;
-
-            // 🎓 Estudiante: nombre.apellido###@pascualbravo.edu.co
-            if (preg_match('/^[a-zA-Z]+\.[a-zA-Z]+\d{3}@pascualbravo\.edu\.co$/i', $email)) {
-                $user->role_id = Role::where('name', 'estudiante')->value('id');
-            } else {
-                // 👨‍🏫 Profesor: cualquier otro correo institucional
-                $user->role_id = Role::where('name', 'profesor')->value('id');
-            }
-        });
+        $role = Role::where('name', $roleName)->firstOrFail();
+        $this->roles()->syncWithoutDetaching([$role->id]); // evita duplicados
     }
+
+    /**
+     * Obtiene una lista de nombres de roles como array.
+     */
+    public function getRoleNamesAttribute(): array
+    {
+        return $this->roles->pluck('name')->toArray();
+    }
+
+    public function reservas()
+    {
+        return $this->hasMany(Reserva::class);
+    }
+
 }

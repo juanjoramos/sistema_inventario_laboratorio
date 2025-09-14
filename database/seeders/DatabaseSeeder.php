@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,12 +25,13 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@pascualbravo.edu.co'],
             [
                 'name' => 'Administrador',
-                'password' => Hash::make('admin123'), 
+                'password' => Hash::make('admin123'),
             ]
         );
 
-        // Asignar rol de admin
-        $admin->role_id = Role::where('name', 'admin')->first()->id;
-        $admin->save();
+        // Asignar rol de admin usando Spatie
+        if (!$admin->hasRole('admin')) {
+            $admin->assignRole('admin');
+        }
     }
 }
