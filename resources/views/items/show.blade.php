@@ -90,6 +90,7 @@
                                         <th class="px-4 py-2 text-left">Usuario</th>
                                         <th class="px-4 py-2 text-left">Cantidad</th>
                                         <th class="px-4 py-2 text-left">Fecha de Reserva</th>
+                                        <th class="px-4 py-2 text-left">Fecha de Devolución</th>
                                         <th class="px-4 py-2 text-left">Estado</th>
                                     </tr>
                                 </thead>
@@ -100,10 +101,20 @@
                                             <td class="px-4 py-2">{{ $reserva->cantidad ?? 1 }}</td>
                                             <td class="px-4 py-2">{{ $reserva->created_at->format('d/m/Y H:i') }}</td>
                                             <td class="px-4 py-2">
+                                                @if($reserva->fecha_devolucion_real)
+                                                    {{ $reserva->fecha_devolucion_real->format('d/m/Y H:i') }}
+                                                @else
+                                                    <span class="text-gray-400">
+                                                        {{ $reserva->estado === 'devuelto' ? 'Sin fecha registrada' : 'No devuelto' }}
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td class="px-4 py-2">
                                                 @switch($reserva->estado)
                                                     @case('pendiente') <span class="text-yellow-400">Pendiente</span> @break
-                                                    @case('aprobada')  <span class="text-green-500">Aprobada</span> @break
-                                                    @case('rechazada') <span class="text-red-500">Rechazada</span> @break
+                                                    @case('entregado')  <span class="text-blue-400">Entregado</span> @break
+                                                    @case('devuelto')  <span class="text-green-500">Devuelto</span> @break
+                                                    @case('cancelado') <span class="text-red-500">Cancelado</span> @break
                                                     @default <span class="text-gray-400">{{ $reserva->estado }}</span>
                                                 @endswitch
                                             </td>
@@ -114,7 +125,6 @@
                         </div>
                     @endif
                 </div>
-
             </div>
         </div>
     </div>

@@ -197,8 +197,11 @@ class ReservaController extends Controller
         // Restaurar stock
         $reserva->item->increment('cantidad', $reserva->cantidad);
 
-        // Cambiar estado
-        $reserva->update(['estado' => 'devuelto']);
+        // Cambiar estado y registrar fecha
+        $reserva->update([
+            'estado' => 'devuelto',
+            'fecha_devolucion_real' => now(),
+        ]);
 
         return redirect()->back()->with('success', '✅ Has devuelto el ítem correctamente.');
     }
