@@ -39,18 +39,99 @@
                     <td class="border px-2 py-1"><?php echo e($item->nombre); ?></td>
                     <td class="border px-2 py-1"><?php echo e($item->cantidad); ?></td>
                     <td class="border px-2 py-1"><?php echo e($item->ubicacion); ?></td>
-                    <td class="border px-2 py-1">
-                        <form action="<?php echo e(route('reservas.store', $item->id)); ?>" method="POST">
-                            <?php echo csrf_field(); ?>
-                            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded">
-                                Reservar
-                            </button>
-                        </form>
+                    <td class="border px-2 py-1 text-center">
+                        <!-- Botón para abrir modal -->
+                        <button
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded open-modal-btn"
+                            data-item-id="<?php echo e($item->id); ?>"
+                            data-item-nombre="<?php echo e($item->nombre); ?>"
+                        >
+                            Reservar
+                        </button>
                     </td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
     </table>
+
+    <!-- Modal -->
+    <div id="reservation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+            <h2 class="text-xl font-bold mb-4">Registrar Préstamo</h2>
+            <form id="reservation-form" method="POST" action="">
+                <?php echo csrf_field(); ?>
+                <div class="mb-4">
+                    <label for="usuario" class="block font-semibold">Usuario:</label>
+                    <input type="text" id="usuario" name="usuario" readonly class="w-full border px-2 py-1 rounded bg-gray-100" />
+                </div>
+                <div class="mb-4">
+                    <label for="fecha_prestamo" class="block font-semibold">Fecha de préstamo:</label>
+                    <input type="text" id="fecha_prestamo" name="fecha_prestamo" readonly class="w-full border px-2 py-1 rounded bg-gray-100" />
+                </div>
+                <div class="mb-4">
+                    <label for="fecha_devolucion_prevista" class="block font-semibold">Fecha de devolución prevista:</label>
+                    <input type="date" id="fecha_devolucion_prevista" name="fecha_devolucion_prevista" required class="w-full border px-2 py-1 rounded" />
+                </div>
+                <div class="mb-4">
+                    <label for="motivo" class="block font-semibold">Motivo:</label>
+                    <textarea id="motivo" name="motivo" required class="w-full border px-2 py-1 rounded"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" id="close-modal" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('reservation-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const form = document.getElementById('reservation-form');
+            const usuarioInput = document.getElementById('usuario');
+            const fechaPrestamoInput = document.getElementById('fecha_prestamo');
+
+            // Obtener usuario actual desde blade (pasamos desde backend)
+            const usuarioNombre = <?php echo json_encode(auth()->user()->name, 15, 512) ?>;
+
+            // Botones para abrir modal
+            document.querySelectorAll('.open-modal-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const itemId = this.getAttribute('data-item-id');
+                    const itemNombre = this.getAttribute('data-item-nombre');
+
+                    // Mostrar modal
+                    modal.classList.remove('hidden');
+
+                    // Setear acción del form con el id del item
+                    form.action = `/items/${itemId}/reservar`;
+
+                    // Poner nombre usuario
+                    usuarioInput.value = usuarioNombre;
+
+                    // Fecha préstamo = hoy en formato yyyy-mm-dd
+                    const hoy = new Date().toISOString().split('T')[0];
+                    fechaPrestamoInput.value = hoy;
+
+                    // Limpiar inputs del modal
+                    form.fecha_devolucion_prevista.value = '';
+                    form.motivo.value = '';
+                });
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            // Opcional: cerrar modal al hacer click fuera del contenido
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>

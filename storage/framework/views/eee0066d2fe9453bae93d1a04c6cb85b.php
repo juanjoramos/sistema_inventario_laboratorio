@@ -19,7 +19,7 @@
             <div class="bg-white dark:bg-gray-800 p-6 shadow sm:rounded-lg">
                 <form action="<?php echo e(route('items.update', $item->id)); ?>" method="POST" class="space-y-4">
                     <?php echo csrf_field(); ?>
-                    <?php echo method_field('PUT'); ?> <!-- 👈 IMPORTANTE -->
+                    <?php echo method_field('PUT'); ?>
 
                     <div>
                         <label class="block font-medium text-gray-700 dark:text-gray-300">Nombre</label>
@@ -35,8 +35,12 @@
 
                     <div>
                         <label class="block font-medium text-gray-700 dark:text-gray-300">Categoría</label>
-                        <input type="text" name="categoria" value="<?php echo e(old('categoria', $item->categoria)); ?>" 
-                               class="w-full border-gray-300 rounded-lg" required>
+                        <select name="categoria" class="w-full border-gray-300 rounded-lg" required>
+                            <option value="">Seleccione una categoría</option>
+                            <option value="Equipos" <?php echo e(old('categoria', $item->categoria) == 'Equipos' ? 'selected' : ''); ?>>Equipos</option>
+                            <option value="Reactivos" <?php echo e(old('categoria', $item->categoria) == 'Reactivos' ? 'selected' : ''); ?>>Reactivos</option>
+                            <option value="Materiales" <?php echo e(old('categoria', $item->categoria) == 'Materiales' ? 'selected' : ''); ?>>Materiales</option>
+                        </select>
                     </div>
 
                     <div>

@@ -20,7 +20,7 @@
             <div class="bg-white dark:bg-gray-800 p-6 shadow sm:rounded-lg">
                 
                 
-                <div class="mb-6">
+                <div class="mb-6 text-white">
                     <p><strong>Código:</strong> <?php echo e($item->codigo); ?></p>
                     <p><strong>Categoría:</strong> <?php echo e($item->categoria); ?></p>
                     <p><strong>Cantidad disponible:</strong> <?php echo e($item->cantidad); ?></p>

@@ -10,7 +10,7 @@
             <div class="bg-white dark:bg-gray-800 p-6 shadow sm:rounded-lg">
                 <form action="{{ route('items.update', $item->id) }}" method="POST" class="space-y-4">
                     @csrf
-                    @method('PUT') <!-- 👈 IMPORTANTE -->
+                    @method('PUT')
 
                     <div>
                         <label class="block font-medium text-gray-700 dark:text-gray-300">Nombre</label>
@@ -26,8 +26,12 @@
 
                     <div>
                         <label class="block font-medium text-gray-700 dark:text-gray-300">Categoría</label>
-                        <input type="text" name="categoria" value="{{ old('categoria', $item->categoria) }}" 
-                               class="w-full border-gray-300 rounded-lg" required>
+                        <select name="categoria" class="w-full border-gray-300 rounded-lg" required>
+                            <option value="">Seleccione una categoría</option>
+                            <option value="Equipos" {{ old('categoria', $item->categoria) == 'Equipos' ? 'selected' : '' }}>Equipos</option>
+                            <option value="Reactivos" {{ old('categoria', $item->categoria) == 'Reactivos' ? 'selected' : '' }}>Reactivos</option>
+                            <option value="Materiales" {{ old('categoria', $item->categoria) == 'Materiales' ? 'selected' : '' }}>Materiales</option>
+                        </select>
                     </div>
 
                     <div>
