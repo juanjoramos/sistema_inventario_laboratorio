@@ -39,10 +39,21 @@
                                     <td class="border px-4 py-2">{{ $item->cantidad }}</td>
                                     <td class="border px-4 py-2">{{ $item->ubicacion }}</td>
                                     <td class="border px-4 py-2 text-center">
-                                        <form action="{{ route('reservas.store', $item->id) }}" method="POST">
+                                        <form action="{{ route('reservas.store', $item->id) }}" method="POST" class="flex flex-col space-y-2">
                                             @csrf
-                                            <button type="submit" 
-                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                                            <input
+                                                type="date"
+                                                name="fecha_devolucion_prevista"
+                                                required
+                                                class="border px-2 py-1 rounded text-sm"
+                                            >
+                                            <textarea
+                                                name="motivo"
+                                                placeholder="Motivo del préstamo"
+                                                required
+                                                class="border px-2 py-1 rounded text-sm"
+                                            ></textarea>
+                                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
                                                 Reservar
                                             </button>
                                         </form>

@@ -29,10 +29,15 @@
                         <label class="block font-medium text-gray-700 dark:text-gray-300">Código</label>
                         <input type="text" name="codigo" class="w-full border-gray-300 rounded-lg" required>
                     </div>
-
+                    
                     <div>
                         <label class="block font-medium text-gray-700 dark:text-gray-300">Categoría</label>
-                        <input type="text" name="categoria" class="w-full border-gray-300 rounded-lg" required>
+                        <select name="categoria" class="w-full border-gray-300 rounded-lg" required>
+                            <option value="">Seleccione una categoría</option>
+                            <option value="Equipos">Equipos</option>
+                            <option value="Reactivos">Reactivos</option>
+                            <option value="Materiales">Materiales</option>
+                        </select>
                     </div>
 
                     <div>

@@ -33,7 +33,7 @@ class ItemController extends Controller
         $validated = $request->validate([
             'nombre'            => 'required|string|max:255',
             'codigo'            => 'required|string|max:50|unique:items',
-            'categoria'         => 'required|string|max:100',
+            'categoria' => 'required|in:Equipos,Reactivos,Materiales',
             'cantidad'          => 'required|integer|min:0',
             'ubicacion'         => 'nullable|string|max:255',
             'proveedor'         => 'nullable|string|max:255',
@@ -79,7 +79,7 @@ class ItemController extends Controller
         $validated = $request->validate([
             'nombre'            => 'required|string|max:255',
             'codigo'            => 'required|string|max:50|unique:items,codigo,' . $item->id,
-            'categoria'         => 'required|string|max:100',
+            'categoria'         => 'required|in:Equipos,Reactivos,Materiales',
             'cantidad'          => 'required|integer|min:0',
             'ubicacion'         => 'nullable|string|max:255',
             'proveedor'         => 'nullable|string|max:255',
@@ -87,7 +87,7 @@ class ItemController extends Controller
             'umbral_minimo'     => 'required|integer|min:0',
         ]);
 
-        // Si la cantidad cambió, registrar transacción
+        // Registrar transacción si cambió la cantidad
         if ($validated['cantidad'] != $item->cantidad) {
             $tipo = $validated['cantidad'] > $item->cantidad ? 'entrada' : 'salida';
             $cantidadCambio = abs($validated['cantidad'] - $item->cantidad);

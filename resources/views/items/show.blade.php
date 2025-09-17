@@ -10,7 +10,7 @@
             <div class="bg-white dark:bg-gray-800 p-6 shadow sm:rounded-lg">
                 
                 {{-- Detalles del ítem --}}
-                <div class="mb-6">
+                <div class="mb-6 text-white">
                     <p><strong>Código:</strong> {{ $item->codigo }}</p>
                     <p><strong>Categoría:</strong> {{ $item->categoria }}</p>
                     <p><strong>Cantidad disponible:</strong> {{ $item->cantidad }}</p>

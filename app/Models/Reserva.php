@@ -14,6 +14,9 @@ class Reserva extends Model
         'item_id',
         'cantidad',
         'estado',
+        'fecha_prestamo',
+        'fecha_devolucion_prevista',
+        'motivo',
     ];
 
     // Relaciones
