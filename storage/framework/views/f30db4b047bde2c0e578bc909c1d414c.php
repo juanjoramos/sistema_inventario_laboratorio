@@ -100,6 +100,7 @@
                                         <th class="px-4 py-2 text-left">Usuario</th>
                                         <th class="px-4 py-2 text-left">Cantidad</th>
                                         <th class="px-4 py-2 text-left">Fecha de Reserva</th>
+                                        <th class="px-4 py-2 text-left">Fecha de Devolución</th>
                                         <th class="px-4 py-2 text-left">Estado</th>
                                     </tr>
                                 </thead>
@@ -110,10 +111,22 @@
                                             <td class="px-4 py-2"><?php echo e($reserva->cantidad ?? 1); ?></td>
                                             <td class="px-4 py-2"><?php echo e($reserva->created_at->format('d/m/Y H:i')); ?></td>
                                             <td class="px-4 py-2">
+                                                <?php if($reserva->fecha_devolucion_real): ?>
+                                                    <?php echo e($reserva->fecha_devolucion_real->format('d/m/Y H:i')); ?>
+
+                                                <?php else: ?>
+                                                    <span class="text-gray-400">
+                                                        <?php echo e($reserva->estado === 'devuelto' ? 'Sin fecha registrada' : 'No devuelto'); ?>
+
+                                                    </span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td class="px-4 py-2">
                                                 <?php switch($reserva->estado):
                                                     case ('pendiente'): ?> <span class="text-yellow-400">Pendiente</span> <?php break; ?>
-                                                    <?php case ('aprobada'): ?>  <span class="text-green-500">Aprobada</span> <?php break; ?>
-                                                    <?php case ('rechazada'): ?> <span class="text-red-500">Rechazada</span> <?php break; ?>
+                                                    <?php case ('entregado'): ?>  <span class="text-blue-400">Entregado</span> <?php break; ?>
+                                                    <?php case ('devuelto'): ?>  <span class="text-green-500">Devuelto</span> <?php break; ?>
+                                                    <?php case ('cancelado'): ?> <span class="text-red-500">Cancelado</span> <?php break; ?>
                                                     <?php default: ?> <span class="text-gray-400"><?php echo e($reserva->estado); ?></span>
                                                 <?php endswitch; ?>
                                             </td>
@@ -124,7 +137,6 @@
                         </div>
                     <?php endif; ?>
                 </div>
-
             </div>
         </div>
     </div>
