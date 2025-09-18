@@ -1,16 +1,15 @@
 <x-app-layout>
     <h1 class="text-2xl font-bold mb-4">Ítems disponibles 🧑‍🏫 (Docente)</h1>
 
-{{-- ✅ Mostrar errores dentro del modal --}}
-@if ($errors->any())
-    <div id="modal-errors" class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-        <ul class="list-disc pl-5">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+    @if ($errors->any())
+        <div id="modal-errors" class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+            <ul class="list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     @if (session('success'))
         <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
@@ -127,11 +126,28 @@
             const form = document.getElementById('reservation-form');
             const cantidadInput = document.getElementById('cantidad');
             const fechaPrestamoInput = document.getElementById('fecha_prestamo');
+            const fechaDevolucionInput = document.getElementById('fecha_devolucion_prevista');
             const errorsBlock = document.getElementById('modal-errors');
 
-            // Fecha préstamo = hoy
+            //Fecha préstamo = hoy
             const hoy = new Date().toISOString().split('T')[0];
             fechaPrestamoInput.value = hoy;
+
+            //Calcular límites para la devolución
+            let fechaHoy = new Date(hoy);
+
+            let fechaManana = new Date(fechaHoy);
+            fechaManana.setDate(fechaHoy.getDate() + 0);
+            const manana = fechaManana.toISOString().split('T')[0];
+
+            let fechaMax = new Date(fechaHoy);
+            fechaMax.setDate(fechaHoy.getDate() + 5);
+            const limite = fechaMax.toISOString().split('T')[0];
+
+            // Configurar rango permitido en el input de fecha devolución
+            fechaDevolucionInput.min = manana;
+            fechaDevolucionInput.max = limite;
+            fechaDevolucionInput.value = manana;
 
             // Botones abrir modal
             document.querySelectorAll('.open-modal-btn').forEach(button => {
@@ -143,7 +159,7 @@
                     form.action = "{{ route('reservas.profesor_store', ':id') }}".replace(':id', itemId);
                     cantidadInput.value = 1;
                     cantidadInput.max = stock;
-                    form.fecha_devolucion_prevista.value = '';
+                    form.fecha_devolucion_prevista.value = manana; // siempre arranca en mañana
                     form.motivo.value = '';
                 });
             });
@@ -172,5 +188,4 @@
             @endif
         });
     </script>
-
 </x-app-layout>

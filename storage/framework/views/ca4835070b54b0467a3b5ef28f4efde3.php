@@ -140,11 +140,30 @@
             const form = document.getElementById('reservation-form');
             const cantidadInput = document.getElementById('cantidad');
             const fechaPrestamoInput = document.getElementById('fecha_prestamo');
+            const fechaDevolucionInput = document.getElementById('fecha_devolucion_prevista');
             const errorsBlock = document.getElementById('modal-errors');
 
             // Fecha préstamo = hoy
             const hoy = new Date().toISOString().split('T')[0];
             fechaPrestamoInput.value = hoy;
+
+            // 👉 Calcular límites para la devolución
+            let fechaHoy = new Date(hoy);
+
+            // mañana (hoy+1)
+            let fechaManana = new Date(fechaHoy);
+            fechaManana.setDate(fechaHoy.getDate() + 0);
+            const manana = fechaManana.toISOString().split('T')[0];
+
+            // máximo permitido (hoy+3)
+            let fechaMax = new Date(fechaHoy);
+            fechaMax.setDate(fechaHoy.getDate() + 5);
+            const limite = fechaMax.toISOString().split('T')[0];
+
+            // Configurar rango permitido en el input de fecha devolución
+            fechaDevolucionInput.min = manana;
+            fechaDevolucionInput.max = limite;
+            fechaDevolucionInput.value = manana;
 
             // Botones abrir modal
             document.querySelectorAll('.open-modal-btn').forEach(button => {
@@ -156,7 +175,7 @@
                     form.action = "<?php echo e(route('reservas.profesor_store', ':id')); ?>".replace(':id', itemId);
                     cantidadInput.value = 1;
                     cantidadInput.max = stock;
-                    form.fecha_devolucion_prevista.value = '';
+                    form.fecha_devolucion_prevista.value = manana; // siempre arranca en mañana
                     form.motivo.value = '';
                 });
             });
@@ -185,7 +204,6 @@
             <?php endif; ?>
         });
     </script>
-
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
@@ -195,5 +213,4 @@
 <?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?>
-<?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/reservas/docente.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/reservas/docente.blade.php ENDPATH**/ ?>

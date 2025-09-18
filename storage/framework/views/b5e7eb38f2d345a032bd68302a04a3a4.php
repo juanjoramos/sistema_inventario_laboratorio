@@ -84,54 +84,70 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const modal = document.getElementById('reservation-modal');
-            const closeModalBtn = document.getElementById('close-modal');
-            const form = document.getElementById('reservation-form');
-            const usuarioInput = document.getElementById('usuario');
-            const fechaPrestamoInput = document.getElementById('fecha_prestamo');
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('reservation-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const form = document.getElementById('reservation-form');
+        const usuarioInput = document.getElementById('usuario');
+        const fechaPrestamoInput = document.getElementById('fecha_prestamo');
+        const fechaDevolucionInput = document.getElementById('fecha_devolucion_prevista');
 
-            // Obtener usuario actual desde blade (pasamos desde backend)
-            const usuarioNombre = <?php echo json_encode(auth()->user()->name, 15, 512) ?>;
+        // Obtener usuario actual desde Blade
+        const usuarioNombre = <?php echo json_encode(auth()->user()->name, 15, 512) ?>;
 
-            // Botones para abrir modal
-            document.querySelectorAll('.open-modal-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const itemId = this.getAttribute('data-item-id');
-                    const itemNombre = this.getAttribute('data-item-nombre');
+        // Botones para abrir modal
+        document.querySelectorAll('.open-modal-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const itemId = this.getAttribute('data-item-id');
+                const itemNombre = this.getAttribute('data-item-nombre');
 
-                    // Mostrar modal
-                    modal.classList.remove('hidden');
+                // Mostrar modal
+                modal.classList.remove('hidden');
 
-                    // Setear acción del form con el id del item
-                    form.action = `/items/${itemId}/reservar`;
+                // Setear acción del form con el id del item
+                form.action = `/items/${itemId}/reservar`;
 
-                    // Poner nombre usuario
-                    usuarioInput.value = usuarioNombre;
+                // Poner nombre usuario
+                usuarioInput.value = usuarioNombre;
 
-                    // Fecha préstamo = hoy en formato yyyy-mm-dd
-                    const hoy = new Date().toISOString().split('T')[0];
-                    fechaPrestamoInput.value = hoy;
+                // Fecha préstamo = hoy en formato yyyy-mm-dd
+                const hoy = new Date().toISOString().split('T')[0];
+                fechaPrestamoInput.value = hoy;
 
-                    // Limpiar inputs del modal
-                    form.fecha_devolucion_prevista.value = '';
-                    form.motivo.value = '';
-                });
-            });
+                // calcular mañana (hoy+1)
+                let fecha = new Date(hoy);
+                fecha.setDate(fecha.getDate() + 0);
+                const manana = fecha.toISOString().split('T')[0];
 
-            closeModalBtn.addEventListener('click', () => {
-                modal.classList.add('hidden');
-            });
+                // calcular límite (hoy+3)
+                let limiteFecha = new Date(hoy);
+                limiteFecha.setDate(limiteFecha.getDate() + 2);
+                const limite = limiteFecha.toISOString().split('T')[0];
 
-            // Opcional: cerrar modal al hacer click fuera del contenido
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.add('hidden');
-                }
+                // configurar rango permitido
+                fechaDevolucionInput.min = manana;   // desde mañana
+                fechaDevolucionInput.max = limite;   // hasta hoy+3
+                fechaDevolucionInput.value = manana; // por defecto mañana
+
+                // Limpiar campo motivo
+                form.motivo.value = '';
             });
         });
-    </script>
+
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        // Opcional: cerrar modal al hacer click fuera del contenido
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
