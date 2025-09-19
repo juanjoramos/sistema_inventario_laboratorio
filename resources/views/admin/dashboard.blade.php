@@ -23,6 +23,10 @@
                     class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow">
                     📋 Ver Reservas Pendientes
                     </a>
+                    <a href="{{ route('users.index') }}" 
+                        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow">
+                        👥 Gestionar Usuarios
+                    </a>
                 </div>
 
                 @if($items->isEmpty())

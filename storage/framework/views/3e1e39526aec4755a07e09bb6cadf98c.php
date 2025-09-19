@@ -20,9 +20,9 @@
                         <a href="<?php echo e(url('/dashboard')); ?>" class="text-gray-200 hover:text-white transition">Dashboard</a>
                     <?php else: ?>
                         <a href="<?php echo e(route('login')); ?>" class="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 shadow-md transition">Iniciar sesión</a>
-                        <?php if(Route::has('register')): ?>
+                        <!--<?php if(Route::has('register')): ?>
                             <a href="<?php echo e(route('register')); ?>" class="px-4 py-2 rounded-xl bg-green-500 hover:bg-green-600 shadow-md transition">Registrarse</a>
-                        <?php endif; ?>
+                        <?php endif; ?>-->
                     <?php endif; ?>
                 </nav>
             </div>
