@@ -10,16 +10,15 @@
 <?php $component->withAttributes([]); ?>
     <h1 class="text-2xl font-bold mb-4">Ítems disponibles 🧑‍🏫 (Docente)</h1>
 
-
-<?php if($errors->any()): ?>
-    <div id="modal-errors" class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-        <ul class="list-disc pl-5">
-            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <li><?php echo e($error); ?></li>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </ul>
-    </div>
-<?php endif; ?>
+    <?php if($errors->any()): ?>
+        <div id="modal-errors" class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+            <ul class="list-disc pl-5">
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li><?php echo e($error); ?></li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
     <?php if(session('success')): ?>
         <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
@@ -143,19 +142,17 @@
             const fechaDevolucionInput = document.getElementById('fecha_devolucion_prevista');
             const errorsBlock = document.getElementById('modal-errors');
 
-            // Fecha préstamo = hoy
+            //Fecha préstamo = hoy
             const hoy = new Date().toISOString().split('T')[0];
             fechaPrestamoInput.value = hoy;
 
-            // 👉 Calcular límites para la devolución
+            //Calcular límites para la devolución
             let fechaHoy = new Date(hoy);
 
-            // mañana (hoy+1)
             let fechaManana = new Date(fechaHoy);
             fechaManana.setDate(fechaHoy.getDate() + 0);
             const manana = fechaManana.toISOString().split('T')[0];
 
-            // máximo permitido (hoy+3)
             let fechaMax = new Date(fechaHoy);
             fechaMax.setDate(fechaHoy.getDate() + 5);
             const limite = fechaMax.toISOString().split('T')[0];

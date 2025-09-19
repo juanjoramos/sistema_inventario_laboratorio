@@ -43,6 +43,8 @@
                                         <span class="px-2 py-1 text-green-700 bg-green-100 rounded-full">Entregado</span>
                                     @elseif($reserva->estado === 'cancelado')
                                         <span class="px-2 py-1 text-red-700 bg-red-100 rounded-full">Cancelado</span>
+                                    @elseif($reserva->estado === 'devuelto')
+                                        <span class="px-2 py-1 text-blue-700 bg-blue-100 rounded-full">Devuelto</span>
                                     @else
                                         <span class="px-2 py-1 text-gray-700 bg-gray-100 rounded-full">Desconocido</span>
                                     @endif

@@ -20,9 +20,9 @@
                         <a href="{{ url('/dashboard') }}" class="text-gray-200 hover:text-white transition">Dashboard</a>
                     @else
                         <a href="{{ route('login') }}" class="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 shadow-md transition">Iniciar sesión</a>
-                        @if (Route::has('register'))
+                        <!--@if (Route::has('register'))
                             <a href="{{ route('register') }}" class="px-4 py-2 rounded-xl bg-green-500 hover:bg-green-600 shadow-md transition">Registrarse</a>
-                        @endif
+                        @endif-->
                     @endauth
                 </nav>
             </div>

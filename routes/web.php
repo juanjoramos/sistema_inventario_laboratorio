@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::get('/dashboard', function () {
         return redirect()->route('login');
     }
 
+    // Si tiene un solo rol → lo mando directo
     if ($user->roles->count() === 1) {
         $role = $user->roles->first()->name;
 
@@ -40,22 +42,31 @@ Route::get('/dashboard', function () {
         };
     }
 
+    // Si tiene más de un rol → selector
     return redirect()->route('dashboard.selector');
 })->middleware('auth')->name('dashboard');
 
 /*
 |--------------------------------------------------------------------------
-| Rutas protegidas
+| Rutas protegidas (cualquier usuario logueado)
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
 
-    // 👤 Perfil
+    /*
+    |-------------------------
+    | 👤 Perfil
+    |-------------------------
+    */
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // 📊 Dashboards
+    /*
+    |-------------------------
+    | 📊 Dashboards
+    |-------------------------
+    */
     Route::get('/admin/dashboard', [ItemController::class, 'adminDashboard'])->name('dashboard.admin');
 
     Route::get('/profesor/dashboard', function () {
@@ -76,7 +87,11 @@ Route::middleware('auth')->group(function () {
         return view('estudiante.dashboard', compact('items', 'reservas'));
     })->name('dashboard.estudiante');
 
-    // 📌 Vista reservas
+    /*
+    |-------------------------
+    | 📌 Reservas
+    |-------------------------
+    */
     Route::get('/reservas/estudiante', function () {
         $items = \App\Models\Item::where('cantidad', '>', 0)->get();
         return view('reservas.estudiante', compact('items'));
@@ -87,7 +102,38 @@ Route::middleware('auth')->group(function () {
         return view('reservas.docente', compact('items'));
     })->name('reservas.profesor');
 
-    // 🔀 Selector de rol
+    // Crear reservas
+    Route::post('/items/{item}/reservar', [ReservaController::class, 'store'])->name('reservas.store'); // estudiante
+    Route::post('/items-profesor/{item}/reservar', [ReservaController::class, 'storeDocente'])->name('reservas.profesor_store'); // profesor
+
+    // Mis reservas
+    Route::get('/mis-reservas', [ReservaController::class, 'misReservas'])->name('reservas.mis_reservas');
+    Route::delete('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar'])->name('reservas.cancelar');
+    Route::patch('/reservas/{reserva}/devolver', [ReservaController::class, 'devolver'])->name('reservas.devolver');
+
+    /*
+    |-------------------------
+    | 📦 Items
+    |-------------------------
+    */
+    Route::resource('items', ItemController::class);
+    Route::get('/items/{item}/edit-stock', [ItemController::class, 'editStock'])->name('items.editStock');
+    Route::post('/items/{item}/update-stock', [ItemController::class, 'updateStock'])->name('items.updateStock');
+
+    /*
+    |-------------------------
+    | 🛠️ Reservas gestionadas por Admin
+    |-------------------------
+    */
+    Route::get('/admin/reservas', [ReservaController::class, 'index'])->name('admin.reservas.index');
+    Route::patch('/admin/reservas/{reserva}/aprobar', [ReservaController::class, 'aprobar'])->name('admin.reservas.aprobar');
+    Route::patch('/admin/reservas/{reserva}/rechazar', [ReservaController::class, 'rechazar'])->name('admin.reservas.rechazar');
+
+    /*
+    |-------------------------
+    | 🔀 Selector de rol
+    |-------------------------
+    */
     Route::get('/seleccionar-rol', function () {
         $user = Auth::user()->load('roles');
         return view('auth.seleccionar-rol', compact('user'));
@@ -112,26 +158,16 @@ Route::middleware('auth')->group(function () {
         session()->forget('selected_role');
         return redirect()->route('dashboard.selector');
     })->name('cambiar-rol');
-
-    // 📦 Items
-    Route::resource('items', ItemController::class);
-    Route::get('/items/{item}/edit-stock', [ItemController::class, 'editStock'])->name('items.editStock');
-    Route::post('/items/{item}/update-stock', [ItemController::class, 'updateStock'])->name('items.updateStock');
-
-    // 🎓 Reservas (estudiante y profesor)
-    Route::post('/items/{item}/reservar', [ReservaController::class, 'store'])->name('reservas.store'); // estudiante
-    Route::post('/items-profesor/{item}/reservar', [ReservaController::class, 'storeDocente'])->name('reservas.profesor_store'); // profesor
-
-    Route::get('/mis-reservas', [ReservaController::class, 'misReservas'])->name('reservas.mis_reservas');
-    Route::delete('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar'])->name('reservas.cancelar');
-
-    // Aquí agregamos la ruta para devolver reservas
-    Route::patch('/reservas/{reserva}/devolver', [ReservaController::class, 'devolver'])->name('reservas.devolver');
-
-    // 🛠️ Admin gestiona reservas
-    Route::get('/admin/reservas', [ReservaController::class, 'index'])->name('admin.reservas.index');
-    Route::patch('/admin/reservas/{reserva}/aprobar', [ReservaController::class, 'aprobar'])->name('admin.reservas.aprobar');
-    Route::patch('/admin/reservas/{reserva}/rechazar', [ReservaController::class, 'rechazar'])->name('admin.reservas.rechazar');
 });
+
+/*
+|--------------------------------------------------------------------------
+| 👑 Admin gestiona usuarios
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::resource('users', UserController::class);
+});
+
 
 require __DIR__.'/auth.php';
