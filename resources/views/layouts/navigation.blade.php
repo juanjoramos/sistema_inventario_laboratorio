@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-blue-800 border-b border-blue-700 text-white">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -6,15 +6,49 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        <img src="{{ asset('images/Logo_1.png') }}" 
+                            alt="Logo" 
+                            class="h-16 w-auto rounded-md filter brightness-0 invert" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link class="text-white" :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if(Auth::user()->roles->contains('name', 'admin'))
+                        <x-nav-link class="text-white" :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
+                            {{ __('Users') }}
+                        </x-nav-link>
+                    @endif
+
+                    @if (!request()->routeIs('dashboard.selector'))
+                        @if(session('selected_role') === 'profesor')
+                            <x-nav-link class="text-white" :href="route('reservas.profesor')" :active="request()->routeIs('reservas.profesor')">
+                                {{ __('Reservas Profesor') }}
+                            </x-nav-link>
+                        @endif
+
+                        @if(session('selected_role') === 'estudiante')
+                            <x-nav-link class="text-white" :href="route('reservas.estudiante')" :active="request()->routeIs('reservas.estudiante')">
+                                {{ __('Reservas Estudiante') }}
+                            </x-nav-link>
+                        @endif
+
+                        @if(Auth::user()->roles->count() === 1 && Auth::user()->roles->contains('name', 'profesor'))
+                            <x-nav-link class="text-white" :href="route('reservas.profesor')" :active="request()->routeIs('reservas.profesor')">
+                                {{ __('Reservas Profesor') }}
+                            </x-nav-link>
+                        @endif
+
+                        @if(Auth::user()->roles->count() === 1 && Auth::user()->roles->contains('name', 'estudiante'))
+                            <x-nav-link class="text-white" :href="route('reservas.estudiante')" :active="request()->routeIs('reservas.estudiante')">
+                                {{ __('Reservas Estudiante') }}
+                            </x-nav-link>
+                        @endif
+                    @endif
                 </div>
             </div>
 

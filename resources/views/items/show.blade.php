@@ -97,7 +97,7 @@
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-white">
                                     @foreach ($item->reservas->sortByDesc('created_at') as $reserva)
                                         <tr>
-                                            <td class="px-4 py-2">{{ $reserva->user->name ?? 'Usuario desconocido' }}</td>
+                                            <td class="px-4 py-2">{{ $reserva->user->email ?? 'Usuario desconocido' }}</td>
                                             <td class="px-4 py-2">{{ $reserva->cantidad ?? 1 }}</td>
                                             <td class="px-4 py-2">{{ $reserva->created_at->format('d/m/Y H:i') }}</td>
                                             <td class="px-4 py-2">

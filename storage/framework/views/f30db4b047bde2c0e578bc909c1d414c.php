@@ -107,7 +107,7 @@
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-white">
                                     <?php $__currentLoopData = $item->reservas->sortByDesc('created_at'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reserva): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
-                                            <td class="px-4 py-2"><?php echo e($reserva->user->name ?? 'Usuario desconocido'); ?></td>
+                                            <td class="px-4 py-2"><?php echo e($reserva->user->email ?? 'Usuario desconocido'); ?></td>
                                             <td class="px-4 py-2"><?php echo e($reserva->cantidad ?? 1); ?></td>
                                             <td class="px-4 py-2"><?php echo e($reserva->created_at->format('d/m/Y H:i')); ?></td>
                                             <td class="px-4 py-2">
