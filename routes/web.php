@@ -93,18 +93,23 @@ Route::middleware('auth')->group(function () {
     |-------------------------
     */
     Route::get('/reservas/estudiante', function () {
-        $items = \App\Models\Item::where('cantidad', '>', 0)->get();
+        $items = \App\Models\Item::all();
         return view('reservas.estudiante', compact('items'));
     })->name('reservas.estudiante');
 
     Route::get('/reservas/profesor', function () {
-        $items = \App\Models\Item::where('cantidad', '>', 0)->get();
-        return view('reservas.docente', compact('items'));
+        $items = \App\Models\Item::all();
+        return view('reservas.profesor', compact('items'));
     })->name('reservas.profesor');
 
     // Crear reservas
-    Route::post('/items/{item}/reservar', [ReservaController::class, 'store'])->name('reservas.store'); // estudiante
-    Route::post('/items-profesor/{item}/reservar', [ReservaController::class, 'storeDocente'])->name('reservas.profesor_store'); // profesor
+    // Estudiante
+    Route::post('/items/{item}/reservar', [ReservaController::class, 'store'])
+        ->name('reservas.store');
+
+    // Profesor
+    Route::post('/items/{item}/reservar-profesor', [ReservaController::class, 'storeDocente'])
+        ->name('reservas.profesor.store');
 
     // Mis reservas
     Route::get('/mis-reservas', [ReservaController::class, 'misReservas'])->name('reservas.mis_reservas');
@@ -169,5 +174,17 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::resource('users', UserController::class);
 });
 
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::resource('users', UserController::class);
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Historial Auditoría (solo admin)
+|--------------------------------------------------------------------------
+*/
+Route::get('/admin/auditoria', [UserController::class, 'auditoria'])->name('admin.auditoria');
 
 require __DIR__.'/auth.php';

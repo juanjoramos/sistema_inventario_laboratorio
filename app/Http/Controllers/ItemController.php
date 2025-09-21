@@ -8,26 +8,20 @@ use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
-    /**
-     * Mostrar lista completa de ítems (para admins).
-     */
+    //Mostrar lista completa de ítems (para admins).
     public function index()
     {
         $items = Item::with('transacciones')->get();
         return view('items.index', compact('items'));
     }
 
-    /**
-     * Mostrar formulario para crear un nuevo ítem (admin).
-     */
+    //Mostrar formulario para crear un nuevo ítem (admin).
     public function create()
     {
         return view('items.create');
     }
 
-    /**
-     * Almacenar un nuevo ítem y registrar transacción inicial (admin).
-     */
+    //Almacenar un nuevo ítem y registrar transacción inicial (admin).
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -54,26 +48,20 @@ class ItemController extends Controller
         return redirect()->route('items.index')->with('success', 'Ítem creado correctamente.');
     }
 
-    /**
-     * Mostrar detalles de un ítem (admin).
-     */
+    //Mostrar detalles de un ítem (admin).
     public function show(Item $item)
     {
         $item->load(['transacciones', 'reservas.user']);
         return view('items.show', compact('item'));
     }
 
-    /**
-     * Mostrar formulario para editar un ítem (admin).
-     */
+    //Mostrar formulario para editar un ítem (admin).
     public function edit(Item $item)
     {
         return view('items.edit', compact('item'));
     }
 
-    /**
-     * Actualizar un ítem existente y registrar cambios de stock (admin).
-     */
+    //Actualizar un ítem existente y registrar cambios de stock (admin).
     public function update(Request $request, Item $item)
     {
         $validated = $request->validate([
@@ -105,53 +93,41 @@ class ItemController extends Controller
         return redirect()->route('items.index')->with('success', 'Ítem actualizado correctamente.');
     }
 
-    /**
-     * Eliminar un ítem del inventario (admin).
-     */
+    //Eliminar un ítem del inventario (admin).
     public function destroy(Item $item)
     {
         $item->delete();
         return redirect()->route('items.index')->with('success', 'Ítem eliminado correctamente.');
     }
 
-    /**
-     * Mostrar dashboard del administrador con ítems de bajo stock.
-     */
+    //Mostrar dashboard del administrador con ítems de bajo stock.
     public function adminDashboard()
     {
         $items = Item::whereColumn('cantidad', '<=', 'umbral_minimo')->get();
         return view('admin.dashboard', compact('items'));
     }
 
-    /**
-     * Vista para estudiantes: muestra ítems disponibles.
-     */
+    //Vista para estudiantes: muestra ítems disponibles.
     public function studentIndex()
     {
         $items = Item::where('cantidad', '>', 0)->get();
         return view('items.student_index', compact('items'));
     }
 
-    /**
-     * Vista para docentes: muestra ítems disponibles.
-     */
+    //Vista para docentes: muestra ítems disponibles.
     public function docenteIndex()
     {
-        $items = Item::where('cantidad', '>', 0)->get();
+        $items = Item::all();
         return view('items.docente_index', compact('items'));
     }
 
-    /**
-     * Mostrar formulario para actualizar stock (entrada/salida).
-     */
+    //Mostrar formulario para actualizar stock (entrada/salida)
     public function editStock(Item $item)
     {
         return view('items.update_stock', compact('item'));
     }
 
-    /**
-     * Actualizar cantidad de stock (entradas o salidas) y registrar transacción.
-     */
+    //Actualizar cantidad de stock (entradas o salidas) y registrar transacción.
     public function updateStock(Request $request, Item $item)
     {
         $validated = $request->validate([
@@ -189,4 +165,28 @@ class ItemController extends Controller
 
         return redirect()->route('items.show', $item)->with('success', 'Stock actualizado correctamente.');
     }
+
+    public function reservar(Request $request, $id)
+    {
+        $item = Item::findOrFail($id);
+
+        if ($item->cantidad <= 0) {
+            return redirect()->back()->with('error', 'No hay stock disponible para reservar.');
+        }
+
+        // Reducir stock
+        $item->cantidad -= 1;
+        $item->save();
+
+        // Registrar transacción de salida (tipo reserva)
+        Transaccion::create([
+            'item_id'     => $item->id,
+            'tipo'        => 'reserva',
+            'cantidad'    => 1,
+            'descripcion' => 'Reserva realizada por usuario',
+        ]);
+
+        return redirect()->back()->with('success', 'Reserva realizada correctamente.');
+    }
+
 }

@@ -9,29 +9,37 @@ class RoleSelectorController extends Controller
 {
     public function show()
     {
-        $user = Auth::user()->load('roles'); // Cargar usuario con roles
+        $user = Auth::user()->load('roles'); //Cargar usuario con roles
         return view('seleccionar-rol', compact('user'));
     }
 
-    public function submit(Request $request)
-    {
-        $request->validate([
-            'role' => 'required|string'
-        ]);
+public function submit(Request $request)
+{
+    $request->validate([
+        'role' => 'required|string'
+    ]);
 
-        // Guardar en sesión el rol seleccionado
-        session(['selected_role' => $request->role]);
+    $user = Auth::user();
 
-        // Redirigir según rol
-        switch ($request->role) {
-            case 'profesor':
-                return redirect()->route('dashboard.profesor');
-            case 'estudiante':
-                return redirect()->route('dashboard.estudiante');
-            case 'admin':
-                return redirect()->route('dashboard.admin');
-            default:
-                return redirect()->route('dashboard');
-        }
+    // Validar que el rol pertenece al usuario
+    if (!$user->roles->contains('name', $request->role)) {
+        abort(403, 'No tienes este rol');
     }
+
+    // Guardar en sesión el rol seleccionado
+    session(['rol_activo' => $request->role]);
+
+    // Redirigir según rol
+    switch ($request->role) {
+        case 'profesor':
+            return redirect()->route('dashboard.profesor');
+        case 'estudiante':
+            return redirect()->route('dashboard.estudiante');
+        case 'admin':
+            return redirect()->route('dashboard.admin');
+        default:
+            return redirect()->route('dashboard');
+    }
+}
+
 }
