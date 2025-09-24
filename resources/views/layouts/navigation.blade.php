@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-blue-800 border-b border-blue-700 text-white">
+<nav x-data="{ open: false }" class="bg-blue-100 dark:bg-blue-900 border-b border-blue-700 text-white">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -27,25 +27,25 @@
                     @if (!request()->routeIs('dashboard.selector'))
                         @if(session('selected_role') === 'profesor')
                             <x-nav-link class="text-white" :href="route('reservas.profesor')" :active="request()->routeIs('reservas.profesor')">
-                                {{ __('Reservas Profesor') }}
+                                {{ __('Items Disponibles') }}
                             </x-nav-link>
                         @endif
 
                         @if(session('selected_role') === 'estudiante')
                             <x-nav-link class="text-white" :href="route('reservas.estudiante')" :active="request()->routeIs('reservas.estudiante')">
-                                {{ __('Reservas Estudiante') }}
+                                {{ __('Items Disponibles') }}
                             </x-nav-link>
                         @endif
 
                         @if(Auth::user()->roles->count() === 1 && Auth::user()->roles->contains('name', 'profesor'))
                             <x-nav-link class="text-white" :href="route('reservas.profesor')" :active="request()->routeIs('reservas.profesor')">
-                                {{ __('Reservas Profesor') }}
+                                {{ __('Items Disponibles') }}
                             </x-nav-link>
                         @endif
 
                         @if(Auth::user()->roles->count() === 1 && Auth::user()->roles->contains('name', 'estudiante'))
                             <x-nav-link class="text-white" :href="route('reservas.estudiante')" :active="request()->routeIs('reservas.estudiante')">
-                                {{ __('Reservas Estudiante') }}
+                                {{ __('Items Disponibles') }}
                             </x-nav-link>
                         @endif
                     @endif

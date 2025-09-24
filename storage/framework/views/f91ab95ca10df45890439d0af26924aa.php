@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-blue-800 border-b border-blue-700 text-white">
+<nav x-data="{ open: false }" class="bg-blue-100 dark:bg-blue-900 border-b border-blue-700 text-white">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -74,7 +74,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['class' => 'text-white','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('reservas.profesor')),'active' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('reservas.profesor'))]); ?>
-                                <?php echo e(__('Reservas Profesor')); ?>
+                                <?php echo e(__('Items Disponibles')); ?>
 
                              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -99,7 +99,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['class' => 'text-white','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('reservas.estudiante')),'active' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('reservas.estudiante'))]); ?>
-                                <?php echo e(__('Reservas Estudiante')); ?>
+                                <?php echo e(__('Items Disponibles')); ?>
 
                              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -124,7 +124,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['class' => 'text-white','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('reservas.profesor')),'active' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('reservas.profesor'))]); ?>
-                                <?php echo e(__('Reservas Profesor')); ?>
+                                <?php echo e(__('Items Disponibles')); ?>
 
                              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -149,7 +149,7 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['class' => 'text-white','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('reservas.estudiante')),'active' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('reservas.estudiante'))]); ?>
-                                <?php echo e(__('Reservas Estudiante')); ?>
+                                <?php echo e(__('Items Disponibles')); ?>
 
                              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

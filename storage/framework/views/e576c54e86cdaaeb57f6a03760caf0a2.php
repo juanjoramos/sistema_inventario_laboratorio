@@ -49,26 +49,26 @@
                     <td class="border px-2 py-1"><?php echo e($item->nombre); ?></td>
                     <td class="border px-2 py-1"><?php echo e($item->cantidad); ?></td>
                     <td class="border px-2 py-1"><?php echo e($item->ubicacion); ?></td>
-<td class="border px-2 py-1 text-center">
-    <?php if($item->cantidad > 0): ?>
-        <!-- Habilitado -->
-        <button
-            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded open-modal-btn"
-            data-item-id="<?php echo e($item->id); ?>"
-            data-item-stock="<?php echo e($item->cantidad); ?>"
-        >
-            Reservar
-        </button>
-    <?php else: ?>
-        <!-- Deshabilitado visualmente -->
-        <button
-            class="bg-gray-400 text-white px-3 py-1 rounded cursor-not-allowed"
-            disabled
-        >
-            Sin stock
-        </button>
-    <?php endif; ?>
-</td>
+                    <td class="border px-2 py-1 text-center">
+                        <?php if($item->cantidad > 0): ?>
+                            <!-- Habilitado -->
+                            <button
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded open-modal-btn"
+                                data-item-id="<?php echo e($item->id); ?>"
+                                data-item-stock="<?php echo e($item->cantidad); ?>"
+                            >
+                                Reservar
+                            </button>
+                        <?php else: ?>
+                            <!-- Deshabilitado visualmente -->
+                            <button
+                                class="bg-gray-400 text-white px-3 py-1 rounded cursor-not-allowed"
+                                disabled
+                            >
+                                Sin stock
+                            </button>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
