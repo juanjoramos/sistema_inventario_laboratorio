@@ -9,36 +9,42 @@
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('header', null, []); ?> 
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Inventario de Ítems
-        </h2>
+        <div class="bg-blue-100 dark:bg-blue-900 rounded-lg p-3 flex items-center gap-3 shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-700 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L15 12 9.75 7v10z" />
+            </svg>
+            <h2 class="font-bold text-xl text-blue-800 dark:text-blue-300">
+                Inventario de Ítems 📦
+            </h2>
+        </div>
      <?php $__env->endSlot(); ?>
 
     <div class="py-6">
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 p-6 shadow sm:rounded-lg">
-                <a href="<?php echo e(route('items.create')); ?>" 
-                   class="inline-block mb-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
-                    + Nuevo ítem
-                </a>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-900 shadow-md sm:rounded-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <a href="<?php echo e(route('items.create')); ?>" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                        ➕ Nuevo ítem
+                    </a>
+                </div>
 
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead class="bg-gray-100 dark:bg-gray-700 text-white">
+                    <table class="min-w-full text-sm text-left divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-blue-200 dark:bg-blue-800 text-gray-800 dark:text-white">
                             <tr>
-                                <th class="px-4 py-2 text-left">Nombre</th>
-                                <th class="px-4 py-2 text-left">Código</th>
-                                <th class="px-4 py-2 text-left">Categoría</th>
-                                <th class="px-4 py-2 text-left">Cantidad</th>
-                                <th class="px-4 py-2 text-left">Ubicación</th>
-                                <th class="px-4 py-2 text-left">Proveedor</th>
-                                <th class="px-4 py-2 text-left">Fecha vencimiento</th>
-                                <th class="px-4 py-2 text-left">Acciones</th>
+                                <th class="px-4 py-3">Nombre</th>
+                                <th class="px-4 py-3">Código</th>
+                                <th class="px-4 py-3">Categoría</th>
+                                <th class="px-4 py-3">Cantidad</th>
+                                <th class="px-4 py-3">Ubicación</th>
+                                <th class="px-4 py-3">Proveedor</th>
+                                <th class="px-4 py-3">Vencimiento</th>
+                                <th class="px-4 py-3 text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-white">
-                            <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <tr <?php if($item->cantidad <= $item->umbral_minimo): ?> class="bg-red-100 dark:bg-red-700" <?php endif; ?>>
+                            <?php $__empty_1 = true; $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <tr <?php if($item->cantidad <= $item->umbral_minimo): ?> class="bg-red-50 dark:bg-red-800/50" <?php endif; ?>>
                                     <td class="px-4 py-2"><?php echo e($item->nombre); ?></td>
                                     <td class="px-4 py-2"><?php echo e($item->codigo); ?></td>
                                     <td class="px-4 py-2"><?php echo e($item->categoria); ?></td>
@@ -46,44 +52,50 @@
                                         <?php echo e($item->cantidad); ?>
 
                                         <?php if($item->cantidad <= $item->umbral_minimo && auth()->user()->hasRole('admin')): ?>
-                                            <span class="ml-2 px-2 py-1 bg-red-600 text-white rounded">¡Reabastecer!</span>
+                                            <span class="ml-2 text-xs bg-red-600 text-white px-2 py-1 rounded-full">
+                                                ¡Reabastecer!
+                                            </span>
                                         <?php endif; ?>
                                     </td>
                                     <td class="px-4 py-2"><?php echo e($item->ubicacion); ?></td>
                                     <td class="px-4 py-2"><?php echo e($item->proveedor); ?></td>
                                     <td class="px-4 py-2"><?php echo e($item->fecha_vencimiento); ?></td>
-                                    <td class="px-4 py-2 flex space-x-2">
-                                        <!-- Editar -->
-                                        <a href="<?php echo e(route('items.edit', $item->id)); ?>" 
-                                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded">
-                                            Editar
-                                        </a>
+                                    <td class="px-4 py-2 text-center">
+                                        <div class="flex justify-center gap-2 flex-wrap">
+                                            <a href="<?php echo e(route('items.edit', $item->id)); ?>" 
+                                               class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
+                                                Editar
+                                            </a>
 
-                                        <!-- Ver -->
-                                        <a href="<?php echo e(route('items.show', $item->id)); ?>" 
-                                        class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded">
-                                            Ver
-                                        </a>
+                                            <a href="<?php echo e(route('items.show', $item->id)); ?>" 
+                                               class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                                                Ver
+                                            </a>
 
-                                        <!-- Actualizar Stock -->
-                                        <a href="<?php echo e(route('items.editStock', $item->id)); ?>" 
-                                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded">
-                                            Stock
-                                        </a>
+                                            <a href="<?php echo e(route('items.editStock', $item->id)); ?>" 
+                                               class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded text-sm">
+                                                Stock
+                                            </a>
 
-                                        <!-- Eliminar -->
-                                        <form action="<?php echo e(route('items.destroy', $item->id)); ?>" method="POST" 
-                                            onsubmit="return confirm('¿Seguro que deseas eliminar este ítem?')">
-                                            <?php echo csrf_field(); ?>
-                                            <?php echo method_field('DELETE'); ?>
-                                            <button type="submit" 
-                                                    class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded">
-                                                Eliminar
-                                            </button>
-                                        </form>
+                                            <form action="<?php echo e(route('items.destroy', $item->id)); ?>" method="POST"
+                                                  onsubmit="return confirm('¿Seguro que deseas eliminar este ítem?')">
+                                                <?php echo csrf_field(); ?>
+                                                <?php echo method_field('DELETE'); ?>
+                                                <button type="submit"
+                                                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                    Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                <tr>
+                                    <td colspan="8" class="text-center px-4 py-6 text-gray-500 dark:text-gray-400">
+                                        No hay ítems en el inventario.
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>

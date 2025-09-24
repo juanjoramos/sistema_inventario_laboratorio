@@ -1,27 +1,32 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Dashboard Profesor
-        </h2>
+        <div class="bg-blue-100 dark:bg-blue-900 rounded-lg p-3 flex items-center gap-3 shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-700 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L15 12 9.75 7v10z" />
+            </svg>
+            <h2 class="font-bold text-xl text-blue-800 dark:text-blue-300">
+                Bienvenido {{ auth()->user()->name }} 👨‍🏫
+            </h2>
+        </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-blue-100 dark:bg-blue-900 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h1 class="text-2xl font-bold mb-4">Bienvenido Profesor 👨‍🏫</h1>
-                    <p class="text-gray-600 dark:text-gray-400">
+                    <p class="text-gray-600 dark:text-white">
                         Aquí podrás gestionar tus clases, reservas y recursos asignados.
                     </p>
                 </div>
             </div>
 
-            <div class="mt-6 bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6">
-                <h3 class="text-lg font-bold mb-4">📋 Mis Reservas</h3>
+            <div class="mt-6 bg-blue-100 dark:bg-blue-900 shadow-sm sm:rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4 text-white">📋 Mis Reservas</h3>
 
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead>
-                        <tr class="bg-gray-100 dark:bg-gray-700">
+                        <tr class="bg-blue-100 dark:bg-blue-900 ">
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase">#</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase">Ítem</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase">Cantidad</th>

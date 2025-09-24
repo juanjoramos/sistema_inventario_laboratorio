@@ -8,22 +8,22 @@
 <?php $attributes = $attributes->except(\App\View\Components\GuestLayout::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-    <div class="w-full max-w-sm bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white rounded-2xl shadow-2xl p-8 relative overflow-hidden">
+        <div class="w-full max-w-sm bg-gradient-to-br from-slate-800 via-gray-800 to-slate-900 text-white rounded-2xl shadow-2xl p-8 relative overflow-hidden">
 
-        <!-- Imagen arriba del formulario -->
-        <div class="flex justify-center mb-3">
-            <img src="<?php echo e(asset('images/Logo_1.png')); ?>" alt="Logo" 
-                class="h-24 w-auto rounded-md filter brightness-0 invert" />
-        </div>
+            <!-- Imagen arriba del formulario -->
+            <div class="flex justify-center mb-6">
+                <img src="<?php echo e(asset('images/Logo_1.png')); ?>" alt="Logo" 
+                    class="h-20 w-auto rounded-md filter brightness-0 invert" />
+            </div>
 
-        <!-- Título -->
-        <div class="text-center mb-6">
-            <h2 class="text-3xl font-extrabold tracking-wide text-indigo-300">¡Bienvenido!</h2>
-            <p class="text-sm text-gray-400">Inicia sesión para acceder al sistema</p>
-        </div>
+            <!-- Título -->
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold tracking-tight text-indigo-400">¡Bienvenido!</h2>
+                <p class="text-sm text-gray-400">Ingresa tus credenciales para continuar</p>
+            </div>
 
-        <!-- Session Status -->
-        <?php if (isset($component)) { $__componentOriginal7c1bf3a9346f208f66ee83b06b607fb5 = $component; } ?>
+            <!-- Session Status -->
+            <?php if (isset($component)) { $__componentOriginal7c1bf3a9346f208f66ee83b06b607fb5 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7c1bf3a9346f208f66ee83b06b607fb5 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.auth-session-status','data' => ['class' => 'mb-4','status' => session('status')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('auth-session-status'); ?>
@@ -44,12 +44,12 @@
 <?php unset($__componentOriginal7c1bf3a9346f208f66ee83b06b607fb5); ?>
 <?php endif; ?>
 
-        <form method="POST" action="<?php echo e(route('login')); ?>">
-            <?php echo csrf_field(); ?>
+            <form method="POST" action="<?php echo e(route('login')); ?>">
+                <?php echo csrf_field(); ?>
 
-            <!-- Email -->
-            <div class="mb-4">
-                <?php if (isset($component)) { $__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $component; } ?>
+                <!-- Email -->
+                <div class="mb-4">
+                    <?php if (isset($component)) { $__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-label','data' => ['for' => 'email','value' => __('Correo electrónico'),'class' => 'text-indigo-300']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('input-label'); ?>
@@ -69,16 +69,16 @@
 <?php $component = $__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581; ?>
 <?php unset($__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581); ?>
 <?php endif; ?>
-                <?php if (isset($component)) { $__componentOriginal18c21970322f9e5c938bc954620c12bb = $component; } ?>
+                    <?php if (isset($component)) { $__componentOriginal18c21970322f9e5c938bc954620c12bb = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal18c21970322f9e5c938bc954620c12bb = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.text-input','data' => ['id' => 'email','type' => 'email','name' => 'email','value' => old('email'),'required' => true,'autofocus' => true,'class' => 'mt-1 block w-full bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400 px-3 py-2 placeholder-gray-400']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.text-input','data' => ['id' => 'email','type' => 'email','name' => 'email','value' => old('email'),'required' => true,'autofocus' => true,'class' => 'mt-1 block w-full bg-slate-800 border border-slate-700 rounded-lg text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400 px-3 py-2 placeholder-gray-400']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('text-input'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['id' => 'email','type' => 'email','name' => 'email','value' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(old('email')),'required' => true,'autofocus' => true,'class' => 'mt-1 block w-full bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400 px-3 py-2 placeholder-gray-400']); ?>
+<?php $component->withAttributes(['id' => 'email','type' => 'email','name' => 'email','value' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(old('email')),'required' => true,'autofocus' => true,'class' => 'mt-1 block w-full bg-slate-800 border border-slate-700 rounded-lg text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400 px-3 py-2 placeholder-gray-400']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal18c21970322f9e5c938bc954620c12bb)): ?>
@@ -89,7 +89,7 @@
 <?php $component = $__componentOriginal18c21970322f9e5c938bc954620c12bb; ?>
 <?php unset($__componentOriginal18c21970322f9e5c938bc954620c12bb); ?>
 <?php endif; ?>
-                <?php if (isset($component)) { $__componentOriginalf94ed9c5393ef72725d159fe01139746 = $component; } ?>
+                    <?php if (isset($component)) { $__componentOriginalf94ed9c5393ef72725d159fe01139746 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf94ed9c5393ef72725d159fe01139746 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-error','data' => ['messages' => $errors->get('email'),'class' => 'mt-1 text-red-400']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('input-error'); ?>
@@ -109,11 +109,11 @@
 <?php $component = $__componentOriginalf94ed9c5393ef72725d159fe01139746; ?>
 <?php unset($__componentOriginalf94ed9c5393ef72725d159fe01139746); ?>
 <?php endif; ?>
-            </div>
+                </div>
 
-            <!-- Password -->
-            <div class="mb-4">
-                <?php if (isset($component)) { $__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $component; } ?>
+                <!-- Password -->
+                <div class="mb-4">
+                    <?php if (isset($component)) { $__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-label','data' => ['for' => 'password','value' => __('Contraseña'),'class' => 'text-indigo-300']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('input-label'); ?>
@@ -133,16 +133,16 @@
 <?php $component = $__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581; ?>
 <?php unset($__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581); ?>
 <?php endif; ?>
-                <?php if (isset($component)) { $__componentOriginal18c21970322f9e5c938bc954620c12bb = $component; } ?>
+                    <?php if (isset($component)) { $__componentOriginal18c21970322f9e5c938bc954620c12bb = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal18c21970322f9e5c938bc954620c12bb = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.text-input','data' => ['id' => 'password','type' => 'password','name' => 'password','required' => true,'class' => 'mt-1 block w-full bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400 px-3 py-2 placeholder-gray-400']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.text-input','data' => ['id' => 'password','type' => 'password','name' => 'password','required' => true,'class' => 'mt-1 block w-full bg-slate-800 border border-slate-700 rounded-lg text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400 px-3 py-2 placeholder-gray-400']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('text-input'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['id' => 'password','type' => 'password','name' => 'password','required' => true,'class' => 'mt-1 block w-full bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400 px-3 py-2 placeholder-gray-400']); ?>
+<?php $component->withAttributes(['id' => 'password','type' => 'password','name' => 'password','required' => true,'class' => 'mt-1 block w-full bg-slate-800 border border-slate-700 rounded-lg text-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400 px-3 py-2 placeholder-gray-400']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal18c21970322f9e5c938bc954620c12bb)): ?>
@@ -153,7 +153,7 @@
 <?php $component = $__componentOriginal18c21970322f9e5c938bc954620c12bb; ?>
 <?php unset($__componentOriginal18c21970322f9e5c938bc954620c12bb); ?>
 <?php endif; ?>
-                <?php if (isset($component)) { $__componentOriginalf94ed9c5393ef72725d159fe01139746 = $component; } ?>
+                    <?php if (isset($component)) { $__componentOriginalf94ed9c5393ef72725d159fe01139746 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf94ed9c5393ef72725d159fe01139746 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-error','data' => ['messages' => $errors->get('password'),'class' => 'mt-1 text-red-400']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('input-error'); ?>
@@ -173,32 +173,32 @@
 <?php $component = $__componentOriginalf94ed9c5393ef72725d159fe01139746; ?>
 <?php unset($__componentOriginalf94ed9c5393ef72725d159fe01139746); ?>
 <?php endif; ?>
-            </div>
+                </div>
 
-            <!-- Remember Me + Forgot Password -->
-            <div class="flex items-center justify-between text-sm mb-5">
-                <label for="remember_me" class="inline-flex items-center text-gray-300">
-                    <input id="remember_me" type="checkbox" name="remember"
-                        class="rounded border-gray-600 bg-gray-700 text-indigo-400 focus:ring-indigo-400 mr-2">
-                    Recuérdame
-                </label>
+                <!-- Remember Me + Forgot Password -->
+                <div class="flex items-center justify-between text-sm mb-6">
+                    <label for="remember_me" class="inline-flex items-center text-gray-300">
+                        <input id="remember_me" type="checkbox" name="remember"
+                            class="rounded border-slate-600 bg-slate-700 text-indigo-400 focus:ring-indigo-400 mr-2">
+                        Recuérdame
+                    </label>
 
-                <?php if(Route::has('password.request')): ?>
-                    <a class="text-indigo-300 hover:text-indigo-200 transition" href="<?php echo e(route('password.request')); ?>">
-                        ¿Olvidaste tu contraseña?
-                    </a>
-                <?php endif; ?>
-            </div>
+                    <?php if(Route::has('password.request')): ?>
+                        <a class="text-indigo-300 hover:text-indigo-200 transition" href="<?php echo e(route('password.request')); ?>">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    <?php endif; ?>
+                </div>
 
-            <!-- Submit -->
-            <div>
-                <button type="submit"
-                    class="w-full py-3 rounded-lg bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-400 hover:to-blue-400 transition-all duration-300 font-semibold shadow-lg hover:shadow-indigo-500/30">
-                    INICIAR SESIÓN
-                </button>
-            </div>
-        </form>
-    </div>
+                <!-- Submit -->
+                <div>
+                    <button type="submit"
+                        class="w-full py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-500 hover:to-blue-400 transition-all duration-300 font-semibold shadow-md hover:shadow-indigo-500/30">
+                        INICIAR SESIÓN
+                    </button>
+                </div>
+            </form>
+        </div>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal69dc84650370d1d4dc1b42d016d7226b)): ?>
@@ -208,5 +208,4 @@
 <?php if (isset($__componentOriginal69dc84650370d1d4dc1b42d016d7226b)): ?>
 <?php $component = $__componentOriginal69dc84650370d1d4dc1b42d016d7226b; ?>
 <?php unset($__componentOriginal69dc84650370d1d4dc1b42d016d7226b); ?>
-<?php endif; ?>
-<?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/auth/login.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/auth/login.blade.php ENDPATH**/ ?>
