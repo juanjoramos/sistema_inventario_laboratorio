@@ -13,8 +13,8 @@
     <div class="p-6">
         {{-- Bloque para mostrar mensajes de error --}}
         @if ($errors->any())
-            <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                <ul class="list-disc list-inside">
+            <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-sm">
+                <ul class="list-disc list-inside space-y-1">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -22,65 +22,76 @@
             </div>
         @endif
 
-        <form action="{{ route('users.update', $user->id) }}" method="POST">
+        <form action="{{ route('users.update', $user->id) }}" method="POST" class="bg-white p-6 rounded-lg shadow-md border border-gray-200 max-w-lg mx-auto">
             @csrf
             @method('PUT')
 
             {{-- Nombre --}}
-            <div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre</label>
                 <input type="text" 
                        name="name" 
                        value="{{ old('name', $user->name) }}" 
-                       placeholder="Nombre" 
+                       placeholder="Nombre completo" 
                        required 
-                       class="border rounded p-2 w-full mb-2">
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
             </div>
 
             {{-- Email --}}
-            <div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Correo institucional</label>
                 <input type="email" 
                        name="email" 
                        value="{{ old('email', $user->email) }}" 
-                       placeholder="Correo institucional (@pascualbravo.edu.co)" 
+                       placeholder="ejemplo@pascualbravo.edu.co" 
                        required 
-                       class="border rounded p-2 w-full mb-2">
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
             </div>
 
             {{-- Contraseña (opcional) --}}
-            <div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Nueva Contraseña (opcional)</label>
                 <input type="password" 
                        name="password" 
-                       placeholder="Nueva Contraseña (opcional)" 
-                       class="border rounded p-2 w-full mb-2">
+                       placeholder="********" 
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
             </div>
 
             {{-- Confirmación (opcional) --}}
-            <div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Confirmar Nueva Contraseña</label>
                 <input type="password" 
                        name="password_confirmation" 
-                       placeholder="Confirmar Nueva Contraseña" 
-                       class="border rounded p-2 w-full mb-2">
+                       placeholder="********" 
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
             </div>
 
             {{-- Roles --}}
-            <div class="mt-2">
-                <label class="font-semibold">Roles:</label><br>
-                @foreach($roles as $role)
-                    <label class="block">
-                        <input type="checkbox" name="roles[]" value="{{ $role->id }}"
-                            {{ (is_array(old('roles', $user->roles->pluck('id')->toArray())) 
-                                && in_array($role->id, old('roles', $user->roles->pluck('id')->toArray()))) 
-                                ? 'checked' : '' }}>
-                        {{ $role->name }}
-                    </label>
-                @endforeach
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Asignar Roles</label>
+                <div class="space-y-2">
+                    @foreach($roles as $role)
+                        <label class="flex items-center gap-2 text-gray-700">
+                            <input type="checkbox" 
+                                   name="roles[]" 
+                                   value="{{ $role->id }}"
+                                   class="rounded text-[#293a52] focus:ring-[#293a52]"
+                                   {{ (is_array(old('roles', $user->roles->pluck('id')->toArray())) 
+                                        && in_array($role->id, old('roles', $user->roles->pluck('id')->toArray()))) 
+                                        ? 'checked' : '' }}>
+                            {{ $role->name }}
+                        </label>
+                    @endforeach
+                </div>
             </div>
 
             {{-- Botón --}}
-            <button type="submit" 
-                    class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-                Actualizar
-            </button>
+            <div class="flex justify-end">
+                <button type="submit" 
+                        class="bg-[#293a52] hover:bg-[#1e2c42] text-white font-semibold px-6 py-2 rounded-lg shadow-md transition">
+                    Actualizar
+                </button>
+            </div>
         </form>
     </div>
 </x-app-layout>

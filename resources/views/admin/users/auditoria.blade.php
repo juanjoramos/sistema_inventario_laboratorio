@@ -10,43 +10,46 @@
         </div>
     </x-slot>
 
-    <div class="p-6 space-y-4">
-        <div class="mb-4">
-            <a href="{{ route('users.index') }}" class="bg-blue-600 text-white px-4 py-2 rounded">
+    <div class="p-6 space-y-6">
+        <!-- Botón volver -->
+        <div>
+            <a href="{{ route('users.index') }}" 
+               class="inline-flex items-center gap-2 bg-[#293a52] hover:bg-[#1e2c42] text-white px-4 py-2 rounded-lg shadow-md transition">
                 ← Volver a Usuarios
             </a>
         </div>
 
+        <!-- Listado de Logs -->
         @forelse($logs as $log)
-            <div class="bg-white p-4 rounded shadow border">
-                <p><strong>👤 Usuario:</strong> {{ $log->usuario->name ?? 'Sistema' }}</p>
-                <p><strong>🕒 Fecha:</strong> {{ $log->created_at->format('d/m/Y H:i') }}</p>
-                <p><strong>⚙️ Acción:</strong> {{ ucfirst($log->accion) }}</p>
-                <p><strong>📌 Modelo afectado:</strong> {{ $log->modelo_afectado }} #{{ $log->modelo_id }}</p>
-                <p><strong>📝 Descripción:</strong> {{ $log->descripcion }}</p>
+            <div class="bg-white p-5 rounded-lg shadow-md border border-gray-200">
+                <div class="grid sm:grid-cols-2 gap-4 text-gray-700">
+                    <p><span class="font-semibold text-[#293a52]">👤 Usuario:</span> {{ $log->usuario->name ?? 'Sistema' }}</p>
+                    <p><span class="font-semibold text-[#293a52]">🕒 Fecha:</span> {{ $log->created_at->format('d/m/Y H:i') }}</p>
+                    <p><span class="font-semibold text-[#293a52]">⚙️ Acción:</span> {{ ucfirst($log->accion) }}</p>
+                    <p><span class="font-semibold text-[#293a52]">📌 Modelo afectado:</span> {{ $log->modelo_afectado }} #{{ $log->modelo_id }}</p>
+                </div>
+                
+                <p class="mt-3"><span class="font-semibold text-[#293a52]">📝 Descripción:</span> {{ $log->descripcion }}</p>
 
                 @if($log->datos_anteriores)
-                    <details class="mt-2">
-                        <summary class="cursor-pointer text-sm text-gray-600">📂 Datos anteriores</summary>
-                        <pre class="bg-gray-100 p-2 text-sm rounded overflow-x-auto">
-                        {{ json_encode($log->datos_anteriores, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
-                        </pre>
+                    <details class="mt-3 bg-gray-50 p-3 rounded-lg">
+                        <summary class="cursor-pointer font-semibold text-sm text-[#293a52]">📂 Datos anteriores</summary>
+                        <pre class="bg-gray-100 mt-2 p-2 text-xs rounded overflow-x-auto border">{{ json_encode($log->datos_anteriores, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
                     </details>
                 @endif
 
                 @if($log->datos_nuevos)
-                    <details class="mt-2">
-                        <summary class="cursor-pointer text-sm text-gray-600">📁 Datos nuevos</summary>
-                        <pre class="bg-gray-100 p-2 text-sm rounded overflow-x-auto">
-                        {{ json_encode($log->datos_nuevos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
-                        </pre>
+                    <details class="mt-3 bg-gray-50 p-3 rounded-lg">
+                        <summary class="cursor-pointer font-semibold text-sm text-[#293a52]">📁 Datos nuevos</summary>
+                        <pre class="bg-gray-100 mt-2 p-2 text-xs rounded overflow-x-auto border">{{ json_encode($log->datos_nuevos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
                     </details>
                 @endif
             </div>
         @empty
-            <p class="text-gray-600">No hay registros aún.</p>
+            <p class="text-gray-600 italic">No hay registros aún.</p>
         @endforelse
 
+        <!-- Paginación -->
         <div class="mt-6">
             {{ $logs->links() }}
         </div>

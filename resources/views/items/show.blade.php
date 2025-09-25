@@ -14,7 +14,6 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 p-6 shadow sm:rounded-lg">
                 
-                {{-- Detalles del ítem --}}
                 <div class="mb-6 text-white">
                     <p><strong>Código:</strong> {{ $item->codigo }}</p>
                     <p><strong>Categoría:</strong> {{ $item->categoria }}</p>
@@ -25,7 +24,6 @@
                     <p><strong>Fecha de vencimiento:</strong> {{ $item->fecha_vencimiento ?? 'No aplica' }}</p>
                 </div>
 
-                {{-- Botones para admins --}}
                 @if(auth()->user()->hasRole('admin'))
                     <div class="flex gap-3 mb-6">
                         <a href="{{ route('items.edit', $item) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow">
@@ -37,7 +35,6 @@
                     </div>
                 @endif
 
-                {{-- Botones de alternancia --}}
                 <div class="flex space-x-3 mb-4">
                     <button @click="mostrar = 'transacciones'" 
                             class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700"
@@ -49,11 +46,15 @@
                             :class="{'bg-teal-800': mostrar === 'reservas'}">
                         📘 Historial de Reservas
                     </button>
+                        <button @click="mostrar = 'alertas'" 
+                            class="px-4 py-2 rounded bg-teal-600 text-white hover:bg-teal-700"
+                            :class="{'bg-teal-800': mostrar === 'alertas'}">
+                        📘 Historial de Alertas
+                    </button>
                 </div>
 
-                {{-- Sección: Transacciones --}}
                 <div x-show="mostrar === 'transacciones'" x-cloak>
-                    <h4 class="text-lg font-semibold mb-2">📦 Historial de Transacciones</h4>
+                    <h4 class="text-lg font-semibold mb-2 text-white">📦 Historial de Transacciones</h4>
                     @if($item->transacciones->isEmpty())
                         <p class="text-gray-500">No hay transacciones registradas aún.</p>
                     @else
@@ -73,7 +74,13 @@
                                             <td class="px-4 py-2">{{ $t->created_at->format('d/m/Y H:i') }}</td>
                                             <td class="px-4 py-2 capitalize">{{ $t->tipo }}</td>
                                             <td class="px-4 py-2">{{ $t->cantidad }}</td>
-                                            <td class="px-4 py-2">{{ $t->descripcion }}</td>
+<td class="px-4 py-2">
+    @if($t->usuario)
+        Prestado por {{ $t->usuario->email }}
+    @else
+        {{ $t->descripcion }}
+    @endif
+</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -82,9 +89,8 @@
                     @endif
                 </div>
 
-                {{-- Sección: Reservas --}}
                 <div x-show="mostrar === 'reservas'" x-cloak>
-                    <h4 class="text-lg font-semibold mb-2">📘 Historial de Reservas</h4>
+                    <h4 class="text-lg font-semibold mb-2 text-white">📘 Historial de Reservas</h4>
                     @if ($item->reservas->isEmpty())
                         <p class="text-gray-500">Este ítem no ha sido reservado aún.</p>
                     @else
@@ -121,6 +127,46 @@
                                                     @case('devuelto')  <span class="text-green-500">Devuelto</span> @break
                                                     @case('cancelado') <span class="text-red-500">Cancelado</span> @break
                                                     @default <span class="text-gray-400">{{ $reserva->estado }}</span>
+                                                @endswitch
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+                <div x-show="mostrar === 'alertas'" x-cloak>
+                    <h4 class="text-lg font-semibold mb-2 text-white">⚠️ Historial de Alertas</h4>
+                    @if ($item->alertas->isEmpty())
+                        <p class="text-gray-400">Este ítem no tiene alertas registradas.</p>
+                    @else
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-[#293a52] rounded-lg shadow">
+                                <thead class="bg-[#293a52] text-white">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left">Fecha</th>
+                                        <th class="px-4 py-2 text-left">Ítem Afectado</th>
+                                        <th class="px-4 py-2 text-left">Cantidad</th>
+                                        <th class="px-4 py-2 text-left">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 text-white">
+                                    @foreach ($item->alertas->sortByDesc('created_at') as $alerta)
+                                        <tr>
+                                            <td class="px-4 py-2">{{ $alerta->created_at->format('d/m/Y H:i') }}</td>
+                                            <td class="px-4 py-2">{{ $item->nombre }}</td>
+                                            <td class="px-4 py-2">{{ $alerta->cantidad }}</td>
+                                            <td class="px-4 py-2">
+                                                @switch($alerta->estado)
+                                                    @case('pendiente') 
+                                                        <span class="px-2 py-1 bg-yellow-500 text-black rounded">Pendiente</span> 
+                                                        @break
+                                                    @case('atendida') 
+                                                        <span class="px-2 py-1 bg-green-600 text-white rounded">Atendida</span> 
+                                                        @break
+                                                    @default 
+                                                        <span class="px-2 py-1 bg-gray-500 text-white rounded">{{ $alerta->estado }}</span>
                                                 @endswitch
                                             </td>
                                         </tr>

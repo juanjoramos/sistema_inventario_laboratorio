@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AlertaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -177,6 +178,18 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::resource('users', UserController::class);
+});
+
+/*
+|--------------------------------------------------------------------------
+| 🔔 Alertas (solo admin)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/admin/alertas', [AlertaController::class, 'index'])->name('alertas.index');
+    Route::post('/admin/alertas', [AlertaController::class, 'store'])->name('alertas.store');
+    Route::patch('/admin/alertas/{alerta}/atender', [AlertaController::class, 'atender'])->name('alertas.atender');
+    Route::delete('/admin/alertas/{alerta}', [AlertaController::class, 'destroy'])->name('alertas.destroy');
 });
 
 
