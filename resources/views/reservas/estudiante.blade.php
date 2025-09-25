@@ -1,160 +1,184 @@
 <x-app-layout>
-    <h1 class="text-2xl font-bold mb-4">Ítems disponibles 🎓 (Estudiante)</h1>
-
-    @if ($errors->any())
-        <div id="modal-errors" class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-            <ul class="list-disc pl-5">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+    <x-slot name="header">
+        <div class="bg-blue-100 dark:bg-blue-900 rounded-lg p-3 flex items-center gap-3 shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-700 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L15 12 9.75 7v10z" />
+            </svg>
+            <h2 class="font-bold text-xl text-blue-800 dark:text-blue-300">
+                Ítems disponibles 🎓 (Estudiante)
+            </h2>
         </div>
-    @endif
+    </x-slot>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-    @if (session('success'))
-        <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
-            ✅ {{ session('success') }}
-        </div>
-    @endif
+            @if ($errors->any())
+                <div id="modal-errors" class="p-3 bg-red-600 text-white rounded shadow">
+                    <ul class="list-disc pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-    @if (session('error'))
-        <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-            ❌ {{ session('error') }}
-        </div>
-    @endif
+            @if (session('success'))
+                <div class="p-3 bg-green-600 text-white rounded shadow">
+                    ✅ {{ session('success') }}
+                </div>
+            @endif
 
-    <table class="table-auto border-collapse border border-gray-300 w-full">
-        <thead class="bg-gray-200">
-            <tr>
-                <th class="border px-2 py-1">Nombre</th>
-                <th class="border px-2 py-1">Cantidad</th>
-                <th class="border px-2 py-1">Ubicación</th>
-                <th class="border px-2 py-1">Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($items as $item)
-                <tr>
-                    <td class="border px-2 py-1">{{ $item->nombre }}</td>
-                    <td class="border px-2 py-1">{{ $item->cantidad }}</td>
-                    <td class="border px-2 py-1">{{ $item->ubicacion }}</td>
-                    <td class="border px-2 py-1 text-center">
-                        @if ($item->cantidad > 0)
-                            <!-- Habilitado -->
-                            <button
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded open-modal-btn"
-                                data-item-id="{{ $item->id }}"
-                                data-item-stock="{{ $item->cantidad }}"
-                            >
-                                Reservar
+            @if (session('error'))
+                <div class="p-3 bg-red-600 text-white rounded shadow">
+                    ❌ {{ session('error') }}
+                </div>
+            @endif
+
+            <div class="bg-[#293a52] shadow-md sm:rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4 text-white">📦 Inventario</h3>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-600">
+                        <thead>
+                            <tr class="bg-[#1f2a3a]">
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Nombre</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Cantidad</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Ubicación</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700">
+                            @foreach ($items as $item)
+                                <tr class="hover:bg-[#36455e] transition">
+                                    <td class="px-6 py-4 text-sm text-gray-100">{{ $item->nombre }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-100">{{ $item->cantidad }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-100">{{ $item->ubicacion }}</td>
+                                    <td class="px-6 py-4 text-sm text-center">
+                                        @if ($item->cantidad > 0)
+                                            <button
+                                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded shadow open-modal-btn"
+                                                data-item-id="{{ $item->id }}"
+                                                data-item-stock="{{ $item->cantidad }}"
+                                            >
+                                                Reservar
+                                            </button>
+                                        @else
+                                            <button
+                                                class="bg-gray-500 text-white px-3 py-1 rounded cursor-not-allowed"
+                                                disabled
+                                            >
+                                                Sin stock
+                                            </button>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div id="reservation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative animate-fadeIn">
+                    <div class="flex items-center gap-3 border-b pb-3 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <h2 class="text-2xl font-bold text-gray-800">Registrar Préstamo</h2>
+                    </div>
+
+                    <form id="reservation-form" method="POST" action="" class="space-y-4">
+                        @csrf
+                        
+                        <div>
+                            <label for="usuario" class="block text-sm font-semibold text-gray-700">👤 Usuario</label>
+                            <input type="text" id="usuario" name="usuario" readonly 
+                                class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+
+                        <div>
+                            <label for="fecha_prestamo" class="block text-sm font-semibold text-gray-700">📅 Fecha de préstamo</label>
+                            <input type="text" id="fecha_prestamo" name="fecha_prestamo" readonly 
+                                class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+
+                        <div>
+                            <label for="fecha_devolucion_prevista" class="block text-sm font-semibold text-gray-700">📆 Fecha de devolución prevista</label>
+                            <input type="date" id="fecha_devolucion_prevista" name="fecha_devolucion_prevista" required 
+                                class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+
+                        <div>
+                            <label for="motivo" class="block text-sm font-semibold text-gray-700">📝 Motivo</label>
+                            <textarea id="motivo" name="motivo" rows="3" required 
+                                    class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                        </div>
+
+                        <div class="flex justify-end gap-3 pt-3 border-t">
+                            <button type="button" id="close-modal" 
+                                    class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium transition">
+                                Cancelar
                             </button>
-                        @else
-                            <!-- Deshabilitado visualmente -->
-                            <button
-                                class="bg-gray-400 text-white px-3 py-1 rounded cursor-not-allowed"
-                                disabled
-                            >
-                                Sin stock
+                            <button type="submit" 
+                                    class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition">
+                                Confirmar
                             </button>
-                        @endif
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <!-- Modal -->
-    <div id="reservation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
-            <h2 class="text-xl font-bold mb-4">Registrar Préstamo</h2>
-            <form id="reservation-form" method="POST" action="">
-                @csrf
-                <div class="mb-4">
-                    <label for="usuario" class="block font-semibold">Usuario:</label>
-                    <input type="text" id="usuario" name="usuario" readonly class="w-full border px-2 py-1 rounded bg-gray-100" />
+                        </div>
+                    </form>
                 </div>
-                <div class="mb-4">
-                    <label for="fecha_prestamo" class="block font-semibold">Fecha de préstamo:</label>
-                    <input type="text" id="fecha_prestamo" name="fecha_prestamo" readonly class="w-full border px-2 py-1 rounded bg-gray-100" />
-                </div>
-                <div class="mb-4">
-                    <label for="fecha_devolucion_prevista" class="block font-semibold">Fecha de devolución prevista:</label>
-                    <input type="date" id="fecha_devolucion_prevista" name="fecha_devolucion_prevista" required class="w-full border px-2 py-1 rounded" />
-                </div>
-                <div class="mb-4">
-                    <label for="motivo" class="block font-semibold">Motivo:</label>
-                    <textarea id="motivo" name="motivo" required class="w-full border px-2 py-1 rounded"></textarea>
-                </div>
-                <div class="flex justify-end space-x-2">
-                    <button type="button" id="close-modal" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Confirmar</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const modal = document.getElementById('reservation-modal');
-        const closeModalBtn = document.getElementById('close-modal');
-        const form = document.getElementById('reservation-form');
-        const usuarioInput = document.getElementById('usuario');
-        const fechaPrestamoInput = document.getElementById('fecha_prestamo');
-        const fechaDevolucionInput = document.getElementById('fecha_devolucion_prevista');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('reservation-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const form = document.getElementById('reservation-form');
+            const usuarioInput = document.getElementById('usuario');
+            const fechaPrestamoInput = document.getElementById('fecha_prestamo');
+            const fechaDevolucionInput = document.getElementById('fecha_devolucion_prevista');
 
-        // Obtener usuario actual desde Blade
-        const usuarioNombre = @json(auth()->user()->name);
+            const usuarioNombre = @json(auth()->user()->name);
 
-        // Función para formatear fecha
-        function formatearFecha(date) {
-            return date.toISOString().split("T")[0];
-        }
+            function formatearFecha(date) {
+                return date.toISOString().split("T")[0];
+            }
 
-        // Botones para abrir modal
-        document.querySelectorAll('.open-modal-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                const itemId = this.getAttribute('data-item-id');
+            document.querySelectorAll('.open-modal-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const itemId = this.getAttribute('data-item-id');
 
-                // Mostrar modal
-                modal.classList.remove('hidden');
+                    modal.classList.remove('hidden');
+                    form.action = `/items/${itemId}/reservar`;
+                    usuarioInput.value = usuarioNombre;
 
-                // Setear acción del form con el id del item
-                form.action = `/items/${itemId}/reservar`;
+                    const hoy = new Date();
+                    const hoyStr = formatearFecha(hoy);
+                    fechaPrestamoInput.value = hoyStr;
 
-                // Poner nombre usuario
-                usuarioInput.value = usuarioNombre;
+                    const maxFecha = new Date(hoy);
+                    maxFecha.setDate(maxFecha.getDate() + 3);
+                    const maxStr = formatearFecha(maxFecha);
 
-                // Fecha préstamo = hoy
-                const hoy = new Date();
-                const hoyStr = formatearFecha(hoy);
-                fechaPrestamoInput.value = hoyStr;
+                    fechaDevolucionInput.min = hoyStr;
+                    fechaDevolucionInput.max = maxStr;
+                    fechaDevolucionInput.value = hoyStr;
 
-                // calcular límite (hoy+3)
-                const maxFecha = new Date(hoy);
-                maxFecha.setDate(maxFecha.getDate() + 3);
-                const maxStr = formatearFecha(maxFecha);
+                    form.motivo.value = '';
+                });
+            });
 
-                // configurar rango permitido
-                fechaDevolucionInput.min = hoyStr;   // desde hoy
-                fechaDevolucionInput.max = maxStr;   // hasta hoy+3
-                fechaDevolucionInput.value = hoyStr; // por defecto hoy
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
 
-                // Limpiar campo motivo
-                form.motivo.value = '';
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
             });
         });
-
-        closeModalBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-        });
-
-        // Opcional: cerrar modal al hacer click fuera del contenido
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-            }
-        });
-    });
-</script>
-
+    </script>
 </x-app-layout>

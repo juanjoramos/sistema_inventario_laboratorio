@@ -8,80 +8,22 @@
 <?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-    <h1 class="text-2xl font-bold mb-4">Ítems disponibles 🧑‍🏫 (Docente)</h1>
-
-    <?php if($errors->any()): ?>
-        <div id="modal-errors" class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-            <ul class="list-disc pl-5">
-                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <li><?php echo e($error); ?></li>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </ul>
+     <?php $__env->slot('header', null, []); ?> 
+        <div class="bg-blue-100 dark:bg-blue-900 rounded-lg p-3 flex items-center gap-3 shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-700 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L15 12 9.75 7v10z" />
+            </svg>
+            <h2 class="font-bold text-xl text-blue-800 dark:text-blue-300">
+                Ítems disponibles 🧑‍🏫 (Docente)
+            </h2>
         </div>
-    <?php endif; ?>
+     <?php $__env->endSlot(); ?>
 
-    <?php if(session('success')): ?>
-        <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
-            ✅ <?php echo e(session('success')); ?>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-        </div>
-    <?php endif; ?>
-
-    <?php if(session('error')): ?>
-        <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-            ❌ <?php echo e(session('error')); ?>
-
-        </div>
-    <?php endif; ?>
-
-    <table class="table-auto border-collapse border border-gray-300 w-full">
-        <thead class="bg-gray-200">
-            <tr>
-                <th class="border px-2 py-1">Nombre</th>
-                <th class="border px-2 py-1">Cantidad disponible</th>
-                <th class="border px-2 py-1">Ubicación</th>
-                <th class="border px-2 py-1">Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <tr>
-                    <td class="border px-2 py-1"><?php echo e($item->nombre); ?></td>
-                    <td class="border px-2 py-1"><?php echo e($item->cantidad); ?></td>
-                    <td class="border px-2 py-1"><?php echo e($item->ubicacion); ?></td>
-                    <td class="border px-2 py-1 text-center">
-                        <?php if($item->cantidad > 0): ?>
-                            <!-- Habilitado -->
-                            <button
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded open-modal-btn"
-                                data-item-id="<?php echo e($item->id); ?>"
-                                data-item-stock="<?php echo e($item->cantidad); ?>"
-                            >
-                                Reservar
-                            </button>
-                        <?php else: ?>
-                            <!-- Deshabilitado visualmente -->
-                            <button
-                                class="bg-gray-400 text-white px-3 py-1 rounded cursor-not-allowed"
-                                disabled
-                            >
-                                Sin stock
-                            </button>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </tbody>
-    </table>
-
-    <!-- Modal -->
-    <div id="reservation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
-            <h2 class="text-xl font-bold mb-4">Registrar Reserva (Docente)</h2>
-
-            
             <?php if($errors->any()): ?>
-                <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
+                <div id="modal-errors" class="p-3 bg-red-600 text-white rounded shadow">
                     <ul class="list-disc pl-5">
                         <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li><?php echo e($error); ?></li>
@@ -90,127 +32,167 @@
                 </div>
             <?php endif; ?>
 
-            
             <?php if(session('success')): ?>
-                <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
-                    <?php echo e(session('success')); ?>
+                <div class="p-3 bg-green-600 text-white rounded shadow">
+                    ✅ <?php echo e(session('success')); ?>
 
                 </div>
             <?php endif; ?>
 
             <?php if(session('error')): ?>
-                <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-                    <?php echo e(session('error')); ?>
+                <div class="p-3 bg-red-600 text-white rounded shadow">
+                    ❌ <?php echo e(session('error')); ?>
 
                 </div>
             <?php endif; ?>
 
-            <form id="reservation-form" method="POST" action="">
-                <?php echo csrf_field(); ?>
-                <div class="mb-4">
-                    <label for="usuario" class="block font-semibold">Usuario:</label>
-                    <input type="text" id="usuario" readonly
-                        class="w-full border px-2 py-1 rounded bg-gray-100"
-                        value="<?php echo e(auth()->user()->name); ?>" />
+            <div class="bg-[#293a52] shadow-md sm:rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4 text-white">📦 Inventario</h3>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-600">
+                        <thead>
+                            <tr class="bg-[#1f2a3a]">
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Nombre</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Cantidad</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Ubicación</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700">
+                            <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr class="hover:bg-[#36455e] transition">
+                                    <td class="px-6 py-4 text-sm text-gray-100"><?php echo e($item->nombre); ?></td>
+                                    <td class="px-6 py-4 text-sm text-gray-100"><?php echo e($item->cantidad); ?></td>
+                                    <td class="px-6 py-4 text-sm text-gray-100"><?php echo e($item->ubicacion); ?></td>
+                                    <td class="px-6 py-4 text-sm text-center">
+                                        <?php if($item->cantidad > 0): ?>
+                                            <button
+                                                class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded shadow open-modal-btn"
+                                                data-item-id="<?php echo e($item->id); ?>"
+                                                data-item-stock="<?php echo e($item->cantidad); ?>"
+                                            >
+                                                Reservar
+                                            </button>
+                                        <?php else: ?>
+                                            <button
+                                                class="bg-gray-500 text-white px-3 py-1 rounded cursor-not-allowed"
+                                                disabled
+                                            >
+                                                Sin stock
+                                            </button>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="mb-4">
-                    <label for="cantidad" class="block font-semibold">Cantidad a reservar:</label>
-                    <input type="number" id="cantidad" name="cantidad" min="1"
-                        class="w-full border px-2 py-1 rounded" required />
+            </div>
+
+            <!-- Modal -->
+            <div id="reservation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative">
+                    <div class="flex items-center gap-3 border-b pb-3 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <h2 class="text-2xl font-bold text-gray-800">Registrar Reserva (Docente)</h2>
+                    </div>
+                    <form id="reservation-form" method="POST" action="" class="space-y-4">
+                        <?php echo csrf_field(); ?>
+                        <div>
+                            <label for="usuario" class="block text-sm font-semibold text-gray-700">👤 Usuario</label>
+                            <input type="text" id="usuario" readonly value="<?php echo e(auth()->user()->name); ?>"
+                                class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+                        <div>
+                            <label for="cantidad" class="block text-sm font-semibold text-gray-700">🔢 Cantidad a reservar</label>
+                            <input type="number" id="cantidad" name="cantidad" min="1" required
+                                class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+                        <div>
+                            <label for="fecha_prestamo" class="block text-sm font-semibold text-gray-700">📅 Fecha de préstamo</label>
+                            <input type="text" id="fecha_prestamo" readonly
+                                class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+                        <div>
+                            <label for="fecha_devolucion_prevista" class="block text-sm font-semibold text-gray-700">📆 Fecha de devolución prevista</label>
+                            <input type="date" id="fecha_devolucion_prevista" name="fecha_devolucion_prevista" required
+                                class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+                        <div>
+                            <label for="motivo" class="block text-sm font-semibold text-gray-700">📝 Motivo</label>
+                            <textarea id="motivo" name="motivo" rows="3" required
+                                    class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                        </div>
+                        <div class="flex justify-end gap-3 pt-3 border-t">
+                            <button type="button" id="close-modal"
+                                    class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium transition">
+                                Cancelar
+                            </button>
+                            <button type="submit"
+                                    class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition">
+                                Confirmar
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="mb-4">
-                    <label for="fecha_prestamo" class="block font-semibold">Fecha de préstamo:</label>
-                    <input type="text" id="fecha_prestamo" readonly
-                        class="w-full border px-2 py-1 rounded bg-gray-100" />
-                </div>
-                <div class="mb-4">
-                    <label for="fecha_devolucion_prevista" class="block font-semibold">Fecha de devolución prevista:</label>
-                    <input type="date" id="fecha_devolucion_prevista" name="fecha_devolucion_prevista"
-                        class="w-full border px-2 py-1 rounded" required />
-                </div>
-                <div class="mb-4">
-                    <label for="motivo" class="block font-semibold">Motivo:</label>
-                    <textarea id="motivo" name="motivo" required class="w-full border px-2 py-1 rounded"></textarea>
-                </div>
-                <div class="flex justify-end space-x-2">
-                    <button type="button" id="close-modal"
-                        class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancelar</button>
-                    <button type="submit"
-                        class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Confirmar</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const modal = document.getElementById('reservation-modal');
-        const closeModalBtn = document.getElementById('close-modal');
-        const form = document.getElementById('reservation-form');
-        const cantidadInput = document.getElementById('cantidad');
-        const fechaPrestamoInput = document.getElementById('fecha_prestamo');
-        const fechaDevolucionInput = document.getElementById('fecha_devolucion_prevista');
-        const motivoInput = document.getElementById('motivo');
-        const errorsBlock = document.getElementById('modal-errors');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('reservation-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const form = document.getElementById('reservation-form');
+            const cantidadInput = document.getElementById('cantidad');
+            const fechaPrestamoInput = document.getElementById('fecha_prestamo');
+            const fechaDevolucionInput = document.getElementById('fecha_devolucion_prevista');
 
-        // 📅 Fecha actual (hoy)
-        const hoy = new Date();
-        const hoyStr = hoy.toISOString().split('T')[0];
-        fechaPrestamoInput.value = hoyStr;
+            function formatearFecha(date) {
+                return date.toISOString().split("T")[0];
+            }
 
-        // 📅 Fecha máxima de devolución = hoy + 5 días
-        const fechaMax = new Date(hoy);
-        fechaMax.setDate(hoy.getDate() + 5);
-        const fechaMaxStr = fechaMax.toISOString().split('T')[0];
+            document.querySelectorAll('.open-modal-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const itemId = this.getAttribute('data-item-id');
+                    const stock = this.getAttribute('data-item-stock');
 
-        // ⬇️ Configura rangos del input de fecha
-        fechaDevolucionInput.min = hoyStr;
-        fechaDevolucionInput.max = fechaMaxStr;
-        fechaDevolucionInput.value = hoyStr;
+                    modal.classList.remove('hidden');
+                    form.action = `/items/${itemId}/reservar-profesor`;
 
-        // 🎯 Botones "Reservar" (abre el modal)
-        document.querySelectorAll('.open-modal-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                const itemId = this.getAttribute('data-item-id');
-                const stock = this.getAttribute('data-item-stock');
+                    const hoy = new Date();
+                    const hoyStr = formatearFecha(hoy);
+                    fechaPrestamoInput.value = hoyStr;
 
-                modal.classList.remove('hidden');
+                    const maxFecha = new Date(hoy);
+                    maxFecha.setDate(maxFecha.getDate() + 5);
+                    const maxStr = formatearFecha(maxFecha);
 
-                // ✅ Construir URL manualmente
-                form.action = `/items/${itemId}/reservar-profesor`;
+                    fechaDevolucionInput.min = hoyStr;
+                    fechaDevolucionInput.max = maxStr;
+                    fechaDevolucionInput.value = hoyStr;
 
-                cantidadInput.value = 1;
-                cantidadInput.max = stock;
-                motivoInput.value = '';
-                fechaDevolucionInput.value = hoyStr; // volver a hoy cada vez
+                    cantidadInput.value = 1;
+                    cantidadInput.max = stock;
+                    form.motivo.value = '';
+                });
+            });
+
+            function cerrarModal() {
+                modal.classList.add('hidden');
+            }
+
+            closeModalBtn.addEventListener('click', cerrarModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    cerrarModal();
+                }
             });
         });
-
-        // ❌ Cerrar modal y limpiar errores
-        function cerrarModal() {
-            modal.classList.add('hidden');
-            if (errorsBlock) {
-                errorsBlock.remove(); // elimina errores visuales
-            }
-        }
-
-        // ❌ Botón "Cancelar"
-        closeModalBtn.addEventListener('click', cerrarModal);
-
-        // ❌ Clic fuera del modal para cerrarlo
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                cerrarModal();
-            }
-        });
-
-        // 🔁 Si hay errores (validación), reabrir el modal al cargar
-        <?php if($errors->any()): ?>
-            modal.classList.remove('hidden');
-        <?php endif; ?>
-    });
-</script>
-
+    </script>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>

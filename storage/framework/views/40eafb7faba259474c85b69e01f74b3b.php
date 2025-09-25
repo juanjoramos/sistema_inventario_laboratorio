@@ -21,7 +21,7 @@
 
     <div class="py-6">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-blue-100 dark:bg-blue-900 shadow-md sm:rounded-lg p-6">
+            <div class="shadow-md sm:rounded-lg p-6" style="background-color:#293a52; color:white;">
                 <div class="mb-4 flex gap-3">
                     <a href="<?php echo e(route('items.index')); ?>" 
                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow">
@@ -45,7 +45,7 @@
                     <!-- Resumen rápido -->
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-100 dark:bg-gray-700">
+                            <thead style="background-color:#293a52; color:white;">
                                 <tr>
                                     <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600 dark:text-gray-300">Nombre</th>
                                     <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600 dark:text-gray-300">Cantidad</th>

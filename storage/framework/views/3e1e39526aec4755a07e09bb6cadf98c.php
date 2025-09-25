@@ -4,25 +4,37 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sistema de Inventarios - I.U. Pascual Bravo</title>
-    <link rel="icon" type="image/png" href="<?php echo e(asset('images/logo1.png')); ?>">
+    <link rel="icon" type="image/png" href="<?php echo e(asset('images/Logo_1.svg')); ?>"style="background-color:#fff;">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet">
+    <!-- Fuente formal -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif
+        }
+    </style>
 </head>
-<body class="font-sans antialiased bg-gray-900 text-white">
+<body class="antialiased bg-white text-gray-900">
     <div class="min-h-screen flex flex-col justify-between">
 
         <!-- HEADER -->
-        <header class="sticky top-0 z-50 bg-gradient-to-r from-blue-800/90 to-indigo-700/90 backdrop-blur-lg shadow-lg">
-            <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-                <h1 class="text-3xl font-extrabold tracking-wide">🔬 Inventario de Laboratorios</h1>
-                <nav class="space-x-4">
+        <header class="sticky top-0 z-50" style="background-color:#fff;">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+                <!-- Título institucional -->
+               <h1 class="flex items-center gap-3 text-2xl font-bold tracking-wide" style="color:#293a52;">
+                    <img src="<?php echo e(asset('images/Logo_1.png')); ?>" alt="Logo" class="h-8 w-8 color-black rounded"    >
+                    Inventario de Laboratorios
+                </h1>
+
+                <!-- Menú -->
+                <nav class="space-x-6 font-semibold">
                     <?php if(auth()->guard()->check()): ?>
-                        <a href="<?php echo e(url('/dashboard')); ?>" class="text-gray-200 hover:text-white transition">Dashboard</a>
+                        <a href="<?php echo e(url('/dashboard')); ?>" class="text-white hover:text-gray-300 transition">Dashboard</a>
                     <?php else: ?>
-                        <a href="<?php echo e(route('login')); ?>" class="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 shadow-md transition">Iniciar sesión</a>
-                        <!--<?php if(Route::has('register')): ?>
-                            <a href="<?php echo e(route('register')); ?>" class="px-4 py-2 rounded-xl bg-green-500 hover:bg-green-600 shadow-md transition">Registrarse</a>
-                        <?php endif; ?>-->
+                        <a href="<?php echo e(route('login')); ?>" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow transition">Iniciar sesión</a>
                     <?php endif; ?>
                 </nav>
             </div>
@@ -30,49 +42,28 @@
 
         <!-- HERO -->
         <main class="flex-grow">
-            <section class="relative text-center py-20 px-6 bg-gradient-to-r from-indigo-900 via-blue-800 to-blue-600 overflow-hidden">
-                <div class="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-20"></div>
-                <h2 class="text-5xl font-extrabold mb-4 animate-fade-in">Sistema de Inventarios</h2>
-                <p class="text-lg text-gray-200 max-w-3xl mx-auto mb-6">
-                    Administra el inventario de equipos, reactivos y materiales de los laboratorios de la Institución Universitaria Pascual Bravo de manera ágil, segura y eficiente.
+            <section class="relative text-center py-20 px-6 bg-gray-100" style="background-color:#293a52">
+                <h2 class="text-4xl font-extrabold mb-4 text-gray-900 text-white">Sistema de Inventarios</h2>
+                <p class="text-lg max-w-3xl mx-auto text-gray-700 text-white">
+                    Administra de manera ágil, segura y eficiente el inventario de equipos, reactivos y materiales de los laboratorios de la Institución Universitaria Pascual Bravo.
                 </p>
             </section>
 
-            <!-- MÓDULOS -->
-            <section id="modulos" class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6 py-16">
-                <div class="bg-gray-800/60 backdrop-blur-lg rounded-2xl p-8 shadow-lg hover:scale-105 transition">
-                    <h3 class="text-2xl font-semibold mb-3 text-center">🧪 Reactivos</h3>
-                    <p class="text-gray-300 text-center">Controla el stock, fechas de vencimiento y uso seguro de los reactivos.</p>
+            <!-- PÁRRAFOS EN CARDS -->
+            <section id="modulos" class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-3 gap-8">
+                <div id="reactivos" class="bg-white border border-gray-200 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
+                    <h3 class="text-xl font-semibold mb-3 text-blue-900 text-center">🧪 Reactivos</h3>
+                    <p class="text-gray-700">Controla el stock, las fechas de vencimiento y el uso seguro de los reactivos.</p>
                 </div>
-                <div class="bg-gray-800/60 backdrop-blur-lg rounded-2xl p-8 shadow-lg hover:scale-105 transition">
-                    <h3 class="text-2xl font-semibold mb-3 text-center">⚙️ Equipos</h3>
-                    <p class="text-gray-300 text-center">Registra y gestiona el préstamo de equipos de laboratorio.</p>
+                <div id="equipos" class="bg-white border border-gray-200 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
+                    <h3 class="text-xl font-semibold mb-3 text-blue-900 text-center">⚙️ Equipos</h3>
+                    <p class="text-gray-700">Registra y gestiona el préstamo de equipos de laboratorio de manera organizada.</p>
                 </div>
-                <div class="bg-gray-800/60 backdrop-blur-lg rounded-2xl p-8 shadow-lg hover:scale-105 transition">
-                    <h3 class="text-2xl font-semibold mb-3 text-center">📦 Materiales</h3>
-                    <p class="text-gray-300 text-center">Administra materiales de uso general para garantizar disponibilidad continua.</p>
-                </div>
-            </section>
-
-            <!-- ESTADÍSTICAS -->
-            <section class="bg-gray-900 py-16 text-center">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                    <div>
-                        <h4 class="text-4xl font-bold text-blue-400">+500</h4>
-                        <p class="text-gray-400">Registros en inventario</p>
-                    </div>
-                    <div>
-                        <h4 class="text-4xl font-bold text-green-400">+120</h4>
-                        <p class="text-gray-400">Usuarios activos</p>
-                    </div>
-                    <div>
-                        <h4 class="text-4xl font-bold text-yellow-400">+15</h4>
-                        <p class="text-gray-400">Laboratorios gestionados</p>
-                    </div>
+                <div id="materiales" class="bg-white border border-gray-200 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
+                    <h3 class="text-xl font-semibold mb-3 text-blue-900 text-center">📦 Materiales</h3>
+                    <p class="text-gray-700">Administra materiales de uso general para garantizar la disponibilidad continua en los laboratorios.</p>
                 </div>
             </section>
         </main>
-    </div>
-</body>
-</html>
+    <
 <?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/welcome.blade.php ENDPATH**/ ?>

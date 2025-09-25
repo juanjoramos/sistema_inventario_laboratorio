@@ -32,4 +32,9 @@ class Item extends Model
         return $this->hasMany(Reserva::class);
     }
 
+    public function alertas()
+    {
+        return $this->hasMany(Alerta::class);
+    }
+
 }
