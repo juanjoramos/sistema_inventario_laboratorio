@@ -65,17 +65,21 @@
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-100"><?php echo e($reserva->created_at->format('d/m/Y H:i')); ?></td>
                                     <td class="px-6 py-4 text-sm text-gray-100"><?php echo e(\Carbon\Carbon::parse($reserva->fecha_devolucion_prevista)->format('d/m/Y')); ?></td>
-                                    <td class="px-6 py-4 text-sm text-gray-100">
-                                        <?php if($reserva->estado === 'entregado'): ?>
-                                            <form action="<?php echo e(route('reservas.devolver', $reserva)); ?>" method="POST" onsubmit="return confirm('¿Deseas devolver este ítem?');">
+                                    <td class="px-6 py-4 text-sm text-gray-100 text-center">
+                                        <?php if($reserva->estado === 'pendiente'): ?>
+                                            <form action="<?php echo e(route('reservas.cancelar', $reserva)); ?>" method="POST" onsubmit="return confirm('¿Deseas cancelar esta reserva?');">
                                                 <?php echo csrf_field(); ?>
                                                 <?php echo method_field('PATCH'); ?>
-                                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded shadow">
-                                                    Devolver
+                                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded shadow text-sm">
+                                                    Cancelar
                                                 </button>
                                             </form>
+                                        <?php elseif($reserva->estado === 'devuelto'): ?>
+                                            <span class="px-3 py-1 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
+                                                Devuelto
+                                            </span>
                                         <?php else: ?>
-                                            <span class="text-gray-400">--</span>
+                                            <span class="text-gray-400 italic">--</span>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
@@ -101,5 +105,4 @@
 <?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?>
-<?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/estudiante/dashboard.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/estudiante/dashboard.blade.php ENDPATH**/ ?>

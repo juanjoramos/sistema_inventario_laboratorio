@@ -7,10 +7,10 @@ use App\Models\Reserva;
 use App\Models\Transaccion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\ReservaConfirmada;
 
 class ReservaController extends Controller
 {
-    //Estudiante: reserva 1 unidad fija
     public function store(Request $request, Item $item)
     {
         // Validar datos
@@ -43,8 +43,8 @@ class ReservaController extends Controller
             return redirect()->back()->withErrors(['reserva' => '⚠️ Ya tienes una reserva activa de este ítem.']);
         }
 
-        // Crear reserva
-        Reserva::create([
+        // Crear reserva y guardarla en variable
+        $reserva = Reserva::create([
             'item_id' => $item->id,
             'user_id' => Auth::id(),
             'cantidad' => 1,
@@ -65,7 +65,10 @@ class ReservaController extends Controller
             'descripcion' => 'Préstamo por usuario ID ' . Auth::id(),
         ]);
 
-        return redirect()->back()->with('success', 'Tu solicitud de préstamo fue registrada y está pendiente de aprobación.');
+        //Enviar notificación al usuario
+        $reserva->user->notify(new ReservaConfirmada($reserva));
+
+        return redirect()->back()->with('success', 'Tu solicitud de préstamo fue registrada y se ha enviado un correo de confirmación.');
     }
 
     //Profesor: puede elegir cantidad.
@@ -93,8 +96,8 @@ class ReservaController extends Controller
             return redirect()->back()->withErrors(['stock' => '❌ No hay suficiente stock disponible.'])->withInput();
         }
 
-        // Crear reserva
-        Reserva::create([
+        // Crear reserva y guardarla en variable
+        $reserva = Reserva::create([
             'item_id' => $item->id,
             'user_id' => Auth::id(),
             'cantidad' => $request->cantidad,
@@ -115,7 +118,10 @@ class ReservaController extends Controller
             'descripcion' => 'Préstamo por usuario ID ' . Auth::id(),
         ]);
 
-        return redirect()->back()->with('success', ' Tu solicitud de préstamo fue registrada y está pendiente de aprobación.');
+        // Enviar notificación al usuario (docente)
+        $reserva->user->notify(new \App\Notifications\ReservaConfirmada($reserva));
+
+        return redirect()->back()->with('success', 'Tu solicitud de préstamo fue registrada y se ha enviado un correo de confirmación.');
     }
 
     //ver reservas del usuario autenticado (profesor o estudiante)
@@ -166,31 +172,38 @@ class ReservaController extends Controller
             abort(403, 'Acceso no autorizado.');
         }
 
-        $reservas = Reserva::with(['user', 'item'])->latest()->get();
+        $reservas = Reserva::with(['user', 'item'])->latest()->paginate(15);
+
         return view('reservas.index', compact('reservas'));
     }
 
-    //Usuario (profesor o estudiante) devuelve el ítem
     public function devolver(Reserva $reserva)
     {
-        if ($reserva->user_id !== Auth::id()) {
-            return redirect()->back()->withErrors(['auth' => '❌ No puedes devolver una reserva que no es tuya.']);
+        // Permitir al propio usuario o a un admin
+        $user = Auth::user();
+        if ($reserva->user_id !== $user->id && !$user->roles->contains('name', 'admin')) {
+            return redirect()->back()->withErrors([
+                'auth' => '❌ No puedes devolver una reserva que no es tuya.'
+            ]);
         }
 
+        // Solo se pueden devolver reservas entregadas
         if ($reserva->estado !== 'entregado') {
-            return redirect()->back()->withErrors(['estado' => '⚠️ Solo se pueden devolver reservas que ya fueron entregadas.']);
+            return redirect()->back()->withErrors([
+                'estado' => '⚠️ Solo se pueden devolver reservas que ya fueron entregadas.'
+            ]);
         }
 
-        // Restaurar stock
+        // Restaurar stock del ítem
         $reserva->item->increment('cantidad', $reserva->cantidad);
 
-        // Cambiar estado y registrar fecha
+        // Cambiar estado y registrar fecha de devolución
         $reserva->update([
             'estado' => 'devuelto',
             'fecha_devolucion_real' => now(),
         ]);
 
-        return redirect()->back()->with('success', '✅ Has devuelto el ítem correctamente.');
+        // Mensaje de éxito
+        return redirect()->back()->with('success', '✅ Reserva devuelta correctamente.');
     }
-
 }

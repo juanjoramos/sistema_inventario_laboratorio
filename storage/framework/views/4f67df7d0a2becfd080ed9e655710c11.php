@@ -69,7 +69,7 @@
 
                                             <a href="<?php echo e(route('items.show', $item->id)); ?>" 
                                                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
-                                                Ver
+                                                Detalles
                                             </a>
 
                                             <a href="<?php echo e(route('items.editStock', $item->id)); ?>" 

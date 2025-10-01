@@ -8,21 +8,19 @@
 <?php $attributes = $attributes->except(\App\View\Components\GuestLayout::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-        <div class="w-full max-w-sm bg-gradient-to-br from-slate-800 via-gray-800 to-slate-900 text-white rounded-2xl shadow-2xl p-8 relative overflow-hidden">
-
-            <!-- Imagen arriba del formulario -->
-            <div class="flex justify-center mb-6">
+    <div id="background" class="w-full min-h-screen flex items-center justify-center transition-all duration-1000">
+        <div class="w-full max-w-sm bg-white from-slate-800 via-gray-800 to-slate-900 text-white rounded-2xl shadow-2xl p-8 relative overflow-hidden">
+            
+            <div class="flex justify-center">
                 <img src="<?php echo e(asset('images/Logo_1.png')); ?>" alt="Logo" 
-                    class="h-20 w-auto rounded-md filter brightness-0 invert" />
+                    class="h-20 w-auto rounded-md" />
             </div>
 
-            <!-- Título -->
             <div class="text-center mb-6">
-                <h2 class="text-3xl font-bold tracking-tight text-indigo-400">¡Bienvenido!</h2>
-                <p class="text-sm text-gray-400">Ingresa tus credenciales para continuar</p>
+                <h2 class="text-3xl font-bold tracking-tight text-[#013549]">¡Bienvenido!</h2>
+                <p class="text-sm text-[#013549]">Ingresa tus credenciales para continuar</p>
             </div>
 
-            <!-- Session Status -->
             <?php if (isset($component)) { $__componentOriginal7c1bf3a9346f208f66ee83b06b607fb5 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7c1bf3a9346f208f66ee83b06b607fb5 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.auth-session-status','data' => ['class' => 'mb-4','status' => session('status')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -47,18 +45,17 @@
             <form method="POST" action="<?php echo e(route('login')); ?>">
                 <?php echo csrf_field(); ?>
 
-                <!-- Email -->
                 <div class="mb-4">
                     <?php if (isset($component)) { $__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-label','data' => ['for' => 'email','value' => __('Correo electrónico'),'class' => 'text-indigo-300']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-label','data' => ['for' => 'email','value' => __('Correo electrónico'),'class' => 'text-[#013549]']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('input-label'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['for' => 'email','value' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Correo electrónico')),'class' => 'text-indigo-300']); ?>
+<?php $component->withAttributes(['for' => 'email','value' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Correo electrónico')),'class' => 'text-[#013549]']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginale3da9d84bb64e4bc2eeebaafabfb2581)): ?>
@@ -111,18 +108,17 @@
 <?php endif; ?>
                 </div>
 
-                <!-- Password -->
                 <div class="mb-4">
                     <?php if (isset($component)) { $__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-label','data' => ['for' => 'password','value' => __('Contraseña'),'class' => 'text-indigo-300']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-label','data' => ['for' => 'password','value' => __('Contraseña'),'class' => 'text-[#013549]']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('input-label'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['for' => 'password','value' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Contraseña')),'class' => 'text-indigo-300']); ?>
+<?php $component->withAttributes(['for' => 'password','value' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Contraseña')),'class' => 'text-[#013549]']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginale3da9d84bb64e4bc2eeebaafabfb2581)): ?>
@@ -175,30 +171,52 @@
 <?php endif; ?>
                 </div>
 
-                <!-- Remember Me + Forgot Password -->
                 <div class="flex items-center justify-between text-sm mb-6">
-                    <label for="remember_me" class="inline-flex items-center text-gray-300">
+                    <label for="remember_me" class="inline-flex items-center text-[#013549]">
                         <input id="remember_me" type="checkbox" name="remember"
                             class="rounded border-slate-600 bg-slate-700 text-indigo-400 focus:ring-indigo-400 mr-2">
                         Recuérdame
                     </label>
 
                     <?php if(Route::has('password.request')): ?>
-                        <a class="text-indigo-300 hover:text-indigo-200 transition" href="<?php echo e(route('password.request')); ?>">
+                        <a class="text-[#013549] hover:text-indigo-200 transition" href="<?php echo e(route('password.request')); ?>">
                             ¿Olvidaste tu contraseña?
                         </a>
                     <?php endif; ?>
                 </div>
 
-                <!-- Submit -->
                 <div>
-                    <button type="submit"
-                        class="w-full py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-500 hover:to-blue-400 transition-all duration-300 font-semibold shadow-md hover:shadow-indigo-500/30">
-                        INICIAR SESIÓN
-                    </button>
+                <button type="submit"
+                    class="w-full py-3 rounded-lg bg-[#013549] hover:bg-[#02506a] transition-all duration-300 font-semibold text-white shadow-md hover:shadow-[#013549]/30">
+                    INICIAR SESIÓN
+                </button>
                 </div>
             </form>
         </div>
+    </div>
+    <script>
+        const background = document.getElementById('background');
+        const images = [
+            "<?php echo e(asset('images/Login-1.jpg')); ?>",
+            "<?php echo e(asset('images/Login-2.jpg')); ?>",
+            "<?php echo e(asset('images/Login-3.jpg')); ?>",
+            "<?php echo e(asset('images/Login-4.jpg')); ?>",
+        ];
+        let index = 0;
+
+        function changeBackground() {
+            const img = new Image();
+            img.src = images[index];
+            img.onload = () => {
+                background.style.backgroundImage = `url('${images[index]}')`;
+                background.style.transition = 'background-image 1s ease-in-out';
+                index = (index + 1) % images.length;
+            }
+        }
+
+        changeBackground();
+        setInterval(changeBackground, 8000);
+    </script>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal69dc84650370d1d4dc1b42d016d7226b)): ?>

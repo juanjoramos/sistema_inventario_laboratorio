@@ -33,7 +33,6 @@
                                     <td class="px-4 py-2 border-b">
                                         <span class="px-2 py-1 rounded text-sm
                                             @if($reserva->estado === 'pendiente') bg-yellow-100 text-yellow-700
-                                            @elseif($reserva->estado === 'aprobada') bg-green-100 text-green-700
                                             @elseif($reserva->estado === 'entregado') bg-blue-100 text-blue-700
                                             @elseif($reserva->estado === 'devuelto') bg-purple-100 text-purple-700
                                             @elseif($reserva->estado === 'cancelado') bg-red-100 text-red-700
@@ -43,19 +42,32 @@
                                         </span>
                                     </td>
                                     <td class="px-4 py-2 border-b text-center">
-                                        @if ($reserva->estado === 'pendiente')
-                                            <form action="{{ route('admin.reservas.aprobar', $reserva) }}" method="POST" class="inline">
+                                        @if($reserva->estado === 'cancelado')
+                                            <span class="px-2 py-1 text-sm bg-red-100 text-red-700 rounded">Cancelado</span>
+                                        @elseif($reserva->estado === 'devuelto')
+                                            <span class="px-2 py-1 text-sm bg-purple-100 text-purple-700 rounded">Devuelto</span>
+                                        @elseif(Auth::user()->roles->contains('name', 'admin'))
+                                            @if($reserva->estado === 'pendiente')
+                                                <form action="{{ route('admin.reservas.aprobar', $reserva) }}" method="POST" class="inline">
+                                                    @csrf @method('PATCH')
+                                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-sm transition">Aprobar</button>
+                                                </form>
+                                                <form action="{{ route('admin.reservas.rechazar', $reserva) }}" method="POST" class="inline ml-2">
+                                                    @csrf @method('PATCH')
+                                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition">Rechazar</button>
+                                                </form>
+                                            @elseif($reserva->estado === 'entregado')
+                                                <form action="{{ route('admin.reservas.devolver', $reserva) }}" method="POST" onsubmit="return confirm('¿Deseas devolver este ítem?');">
+                                                    @csrf @method('PATCH')
+                                                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition">Devolver</button>
+                                                </form>
+                                            @else
+                                                <span class="text-gray-400 italic">Sin acción</span>
+                                            @endif
+                                        @elseif($reserva->user_id === Auth::id() && $reserva->estado === 'pendiente')
+                                            <form action="{{ route('reservas.cancelar', $reserva) }}" method="POST" onsubmit="return confirm('¿Deseas cancelar esta reserva?');">
                                                 @csrf @method('PATCH')
-                                                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-sm transition">
-                                                    Aprobar
-                                                </button>
-                                            </form>
-
-                                            <form action="{{ route('admin.reservas.rechazar', $reserva) }}" method="POST" class="inline ml-2">
-                                                @csrf @method('PATCH')
-                                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition">
-                                                    Rechazar
-                                                </button>
+                                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition">Cancelar</button>
                                             </form>
                                         @else
                                             <span class="text-gray-400 italic">Sin acción</span>
@@ -65,6 +77,9 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <div class="mt-4">
+                        {{ $reservas->links() }}
+                    </div>
                 </div>
             </div>
         </div>

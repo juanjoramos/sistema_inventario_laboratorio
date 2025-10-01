@@ -48,11 +48,7 @@ class ItemController extends Controller
 
         // Registrar alerta si ya inicia bajo el umbral
         if ($item->cantidad <= $item->umbral_minimo) {
-            Alerta::create([
-                'item_id'  => $item->id,
-                'cantidad' => $item->cantidad,
-                'estado'   => 'pendiente',
-            ]);
+            $this->crearAlertaYNotificar($item);
         }
 
         return redirect()->route('items.index')->with('success', 'Ítem creado correctamente.');
@@ -61,8 +57,20 @@ class ItemController extends Controller
     // Mostrar detalles de un ítem (admin).
     public function show(Item $item)
     {
-        $item->load(['transacciones', 'reservas.user']);
-        return view('items.show', compact('item'));
+            $transacciones = $item->transacciones()
+                      ->orderByDesc('created_at')
+                      ->paginate(10, ['*'], 'transacciones_page');
+
+            $reservas = $item->reservas()
+                 ->with('user')
+                 ->orderByDesc('created_at')
+                 ->paginate(10, ['*'], 'reservas_page');
+
+            $alertas = $item->alertas()
+                ->orderByDesc('created_at')
+                ->paginate(10, ['*'], 'alertas_page');
+
+        return view('items.show', compact('item', 'transacciones', 'reservas', 'alertas'));
     }
 
     // Mostrar formulario para editar un ítem (admin).
@@ -102,11 +110,12 @@ class ItemController extends Controller
 
         // Registrar alerta si está bajo el umbral
         if ($item->cantidad <= $item->umbral_minimo) {
-            Alerta::create([
-                'item_id'  => $item->id,
-                'cantidad' => $item->cantidad,
-                'estado'   => 'pendiente',
-            ]);
+            $this->crearAlertaYNotificar($item);
+        } else {
+            // Si subió stock, cerrar alertas pendientes
+            Alerta::where('item_id', $item->id)
+                ->where('estado', 'pendiente')
+                ->update(['estado' => 'atendida']);
         }
 
         return redirect()->route('items.index')->with('success', 'Ítem actualizado correctamente.');
@@ -174,15 +183,11 @@ class ItemController extends Controller
             'descripcion' => $validated['descripcion'] ?? ($validated['tipo'] === 'entrada' ? 'Entrada de stock' : 'Salida de stock'),
         ]);
 
-        // 🚨 Crear siempre una nueva alerta si stock <= umbral
+        // Registrar alerta si stock <= umbral
         if ($item->cantidad <= $item->umbral_minimo) {
-            Alerta::create([
-                'item_id'  => $item->id,
-                'cantidad' => $item->cantidad,
-                'estado'   => 'pendiente',
-            ]);
+            $this->crearAlertaYNotificar($item);
         } else {
-            // ✅ Si subió el stock, marcar las alertas pendientes como atendidas
+            //Si subió el stock, marcar las alertas pendientes como atendidas
             Alerta::where('item_id', $item->id)
                 ->where('estado', 'pendiente')
                 ->update(['estado' => 'atendida']);
@@ -214,13 +219,28 @@ class ItemController extends Controller
 
         // Registrar alerta si stock llega al umbral
         if ($item->cantidad <= $item->umbral_minimo) {
-            Alerta::create([
-                'item_id'  => $item->id,
-                'cantidad' => $item->cantidad,
-                'estado'   => 'pendiente',
-            ]);
+            $this->crearAlertaYNotificar($item);
         }
 
         return redirect()->back()->with('success', 'Reserva realizada correctamente.');
+    }
+
+    //Método privado para registrar alerta y notificar al admin
+    private function crearAlertaYNotificar(Item $item)
+    {
+        // Crear alerta en la BD
+        Alerta::create([
+            'item_id'  => $item->id,
+            'cantidad' => $item->cantidad,
+            'estado'   => 'pendiente',
+        ]);
+
+        // Buscar admin
+        $admin = \App\Models\User::where('email', 'alertas.lab.pb@gmail.com')->first();
+
+        // Notificar si existe el admin
+        if ($admin) {
+            $admin->notify(new \App\Notifications\StockLowNotification($item->nombre, $item->cantidad));
+        }
     }
 }

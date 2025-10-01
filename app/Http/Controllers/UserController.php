@@ -12,13 +12,14 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::with('roles');
+        $query = User::query();
 
         if ($request->filled('email')) {
-            $query->where('email', 'like', '%' . $request->email . '%');
+            $query->where('email', 'like', "%{$request->email}%");
         }
 
-        $users = $query->get();
+        $users = $query->with('roles')->paginate(10);
+
         return view('admin.users.index', compact('users'));
     }
 
@@ -47,7 +48,7 @@ class UserController extends Controller
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => Hash::make($request->password),
         ]);
 
         $user->roles()->sync($request->roles);
@@ -77,8 +78,15 @@ class UserController extends Controller
     {
         $request->validate([
             'name'  => 'required|string',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => [
+                'required',
+                'email',
+                'unique:users,email,' . $user->id,
+                'regex:/^[a-zA-Z0-9._%+-]+@pascualbravo\.edu\.co$/i',
+            ],
             'roles' => 'required|array',
+        ], [
+            'email.regex' => 'El correo debe ser institucional (@pascualbravo.edu.co).',
         ]);
 
         $datos_anteriores = array_merge(
@@ -140,9 +148,13 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Usuario eliminado con éxito');
     }
 
-    public function auditoria()
+    public function auditoria(Request $request)
     {
-        $logs = Auditoria::with('usuario')->latest()->paginate(20);
+        $logs = Auditoria::with('usuario')
+            ->latest()
+            ->paginate(10)
+            ->appends($request->all());
+
         return view('admin.users.auditoria', compact('logs'));
     }
 }

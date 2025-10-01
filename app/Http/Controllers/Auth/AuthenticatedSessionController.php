@@ -9,17 +9,13 @@ use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Mostrar formulario de login
-     */
+    //Mostrar formulario de login
     public function create()
     {
         return view('auth.login');
     }
 
-    /**
-     * Procesar login
-     */
+    //Procesar login
     public function store(Request $request)
     {
         $request->validate([
@@ -83,9 +79,7 @@ class AuthenticatedSessionController extends Controller
         ]);
     }
 
-    /**
-     * Redirigir según el rol
-     */
+    //Redirigir según el rol
     private function redirectByRole($roleName)
     {
         switch ($roleName) {
@@ -100,9 +94,7 @@ class AuthenticatedSessionController extends Controller
         }
     }
 
-    /**
-     * Cerrar sesión
-     */
+    //Cerrar sesión
     public function destroy(Request $request)
     {
         Auth::guard('web')->logout();
