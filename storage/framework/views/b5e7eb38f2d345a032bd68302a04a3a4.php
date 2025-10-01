@@ -90,64 +90,55 @@
             </div>
 
             <!-- Modal -->
-<div id="reservation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative animate-fadeIn">
-        
-        <!-- Encabezado -->
-        <div class="flex items-center gap-3 border-b pb-3 mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <h2 class="text-2xl font-bold text-gray-800">Registrar Préstamo</h2>
-        </div>
+            <div id="reservation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+                <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative animate-fadeIn">
+                    <div class="flex items-center gap-3 border-b pb-3 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <h2 class="text-2xl font-bold text-gray-800">Registrar Préstamo</h2>
+                    </div>
 
-        <!-- Formulario -->
-        <form id="reservation-form" method="POST" action="" class="space-y-4">
-            <?php echo csrf_field(); ?>
-            
-            <!-- Usuario -->
-            <div>
-                <label for="usuario" class="block text-sm font-semibold text-gray-700">👤 Usuario</label>
-                <input type="text" id="usuario" name="usuario" readonly 
-                       class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <form id="reservation-form" method="POST" action="" class="space-y-4">
+                        <?php echo csrf_field(); ?>
+                        
+                        <div>
+                            <label for="usuario" class="block text-sm font-semibold text-gray-700">👤 Usuario</label>
+                            <input type="text" id="usuario" name="usuario" readonly 
+                                class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+
+                        <div>
+                            <label for="fecha_prestamo" class="block text-sm font-semibold text-gray-700">📅 Fecha de préstamo</label>
+                            <input type="text" id="fecha_prestamo" name="fecha_prestamo" readonly 
+                                class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+
+                        <div>
+                            <label for="fecha_devolucion_prevista" class="block text-sm font-semibold text-gray-700">📆 Fecha de devolución prevista</label>
+                            <input type="date" id="fecha_devolucion_prevista" name="fecha_devolucion_prevista" required 
+                                class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+
+                        <div>
+                            <label for="motivo" class="block text-sm font-semibold text-gray-700">📝 Motivo</label>
+                            <textarea id="motivo" name="motivo" rows="3" required 
+                                    class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                        </div>
+
+                        <div class="flex justify-end gap-3 pt-3 border-t">
+                            <button type="button" id="close-modal" 
+                                    class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium transition">
+                                Cancelar
+                            </button>
+                            <button type="submit" 
+                                    class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition">
+                                Confirmar
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <!-- Fecha préstamo -->
-            <div>
-                <label for="fecha_prestamo" class="block text-sm font-semibold text-gray-700">📅 Fecha de préstamo</label>
-                <input type="text" id="fecha_prestamo" name="fecha_prestamo" readonly 
-                       class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
-
-            <!-- Fecha devolución prevista -->
-            <div>
-                <label for="fecha_devolucion_prevista" class="block text-sm font-semibold text-gray-700">📆 Fecha de devolución prevista</label>
-                <input type="date" id="fecha_devolucion_prevista" name="fecha_devolucion_prevista" required 
-                       class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
-
-            <!-- Motivo -->
-            <div>
-                <label for="motivo" class="block text-sm font-semibold text-gray-700">📝 Motivo</label>
-                <textarea id="motivo" name="motivo" rows="3" required 
-                          class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
-            </div>
-
-            <!-- Botones -->
-            <div class="flex justify-end gap-3 pt-3 border-t">
-                <button type="button" id="close-modal" 
-                        class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium transition">
-                    Cancelar
-                </button>
-                <button type="submit" 
-                        class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition">
-                    Confirmar
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
         </div>
     </div>
 

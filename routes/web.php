@@ -11,18 +11,18 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AlertaController;
 
 /*
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 | Página de inicio
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 */
 Route::get('/', function () {
     return view('welcome');
 });
 
 /*
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 | Dashboard por rol (redirección automática)
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 */
 Route::get('/dashboard', function () {
     $user = Auth::user()?->load('roles');
@@ -48,9 +48,9 @@ Route::get('/dashboard', function () {
 })->middleware('auth')->name('dashboard');
 
 /*
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 | Rutas protegidas (cualquier usuario logueado)
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 */
 Route::middleware('auth')->group(function () {
 
@@ -114,7 +114,7 @@ Route::middleware('auth')->group(function () {
 
     // Mis reservas
     Route::get('/mis-reservas', [ReservaController::class, 'misReservas'])->name('reservas.mis_reservas');
-    Route::delete('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar'])->name('reservas.cancelar');
+    Route::patch('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar'])->name('reservas.cancelar');
     Route::patch('/reservas/{reserva}/devolver', [ReservaController::class, 'devolver'])->name('reservas.devolver');
 
     /*
@@ -134,6 +134,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/reservas', [ReservaController::class, 'index'])->name('admin.reservas.index');
     Route::patch('/admin/reservas/{reserva}/aprobar', [ReservaController::class, 'aprobar'])->name('admin.reservas.aprobar');
     Route::patch('/admin/reservas/{reserva}/rechazar', [ReservaController::class, 'rechazar'])->name('admin.reservas.rechazar');
+    Route::patch('/admin/reservas/{reserva}/devolver', [ReservaController::class, 'devolver'])->name('admin.reservas.devolver');
 
     /*
     |-------------------------
@@ -167,9 +168,9 @@ Route::middleware('auth')->group(function () {
 });
 
 /*
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 | 👑 Admin gestiona usuarios
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 */
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::resource('users', UserController::class);
@@ -180,10 +181,15 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::resource('users', UserController::class);
 });
 
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('reservas', [ReservaController::class, 'index'])->name('reservas.index');
+    Route::resource('reservas', ReservaController::class);
+});
+
 /*
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 | 🔔 Alertas (solo admin)
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 */
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/alertas', [AlertaController::class, 'index'])->name('alertas.index');
@@ -192,11 +198,14 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::delete('/admin/alertas/{alerta}', [AlertaController::class, 'destroy'])->name('alertas.destroy');
 });
 
+Route::get('/alertas/estadisticas', [AlertaController::class, 'estadisticas'])
+    ->name('alertas.estadisticas')
+    ->middleware('auth');
 
 /*
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 | Historial Auditoría (solo admin)
-|--------------------------------------------------------------------------
+|-------------------------------------------------------------------------- 
 */
 Route::get('/admin/auditoria', [UserController::class, 'auditoria'])->name('admin.auditoria');
 

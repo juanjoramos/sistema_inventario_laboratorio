@@ -14,12 +14,18 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link class="text-white" :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link class="text-white hover:text-white" :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
                     @if(Auth::user()->roles->contains('name', 'admin'))
-                        <x-nav-link class="text-white" :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
+                        <x-nav-link class="text-white hover:text-white" :href="route('reservas.index')" :active="request()->routeIs('reservas.index')">
+                            {{ __('Ver Reservas') }}
+                        </x-nav-link>
+                    @endif
+
+                    @if(Auth::user()->roles->contains('name', 'admin'))
+                        <x-nav-link class="text-white hover:text-white" :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
                             {{ __('Users') }}
                         </x-nav-link>
                     @endif

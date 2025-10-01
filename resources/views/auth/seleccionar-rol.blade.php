@@ -1,19 +1,24 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="bg-blue-100 dark:bg-blue-900 rounded-lg p-3 flex items-center gap-3 shadow-md">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-700 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L15 12 9.75 7v10z" />
-            </svg>
-            <h2 class="font-bold text-xl text-blue-800 dark:text-blue-300">
-                Selecciona tu Rol
-            </h2>
-        </div>
-    </x-slot>
+<x-guest-layout>
+    <!-- Contenedor principal con fondo dinámico -->
+    <div id="background" class="w-full min-h-screen flex items-center justify-center transition-all duration-1000">
+        
+        <div class="w-full max-w-sm bg-white from-slate-800 via-gray-800 to-slate-900 text-white rounded-2xl shadow-2xl p-8 relative overflow-hidden">
+            
+            <!-- Logo -->
+            <div class="flex justify-center">
+                <img src="{{ asset('images/Logo_1.png') }}" alt="Logo" class="h-20 w-auto rounded-md" />
+            </div>
 
-    <div class="py-12">
-        <div class="max-w-lg mx-auto bg-[#293a52] dark:bg-gray-800 rounded-2xl shadow-lg p-8 text-center">
-            <h2 class="text-2xl font-bold mb-6 text-white">Elige cómo ingresar</h2>
+            <!-- Título -->
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold tracking-tight text-[#013549]">Selecciona tu Rol</h2>
+                <p class="text-sm text-[#013549]">Elige cómo ingresar</p>
+            </div>
 
+            <!-- Session Status -->
+            <x-auth-session-status class="mb-4" :status="session('status')" />
+
+            <!-- Formulario de selección de rol -->
             <form action="{{ route('dashboard.selector.submit') }}" method="POST" class="space-y-4">
                 @csrf
                 <div class="grid gap-3">
@@ -21,7 +26,7 @@
                         <label class="cursor-pointer block">
                             <input type="radio" name="role" value="{{ $role->name }}" class="hidden peer" required>
                             <div class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-800 dark:text-gray-200 font-semibold 
-                                        peer-checked:border-blue-600 peer-checked:bg-blue-600 peer-checked:text-white
+                                        peer-checked:border-[#013549] peer-checked:bg-[#013549] peer-checked:text-white
                                         hover:shadow-md transition">
                                 {{ ucfirst($role->name) }}
                             </div>
@@ -29,11 +34,36 @@
                     @endforeach
                 </div>
 
+                <!-- Botón de envío -->
                 <button type="submit"
-                        class="mt-6 w-full px-5 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold shadow-md hover:from-blue-700 hover:to-blue-800 transition">
+                    class="mt-6 w-full py-3 rounded-lg bg-[#013549] hover:bg-[#02506a] transition-all duration-300 font-semibold text-white shadow-md hover:shadow-[#013549]/30">
                     Ingresar
                 </button>
             </form>
         </div>
     </div>
-</x-app-layout>
+
+    <script>
+        const background = document.getElementById('background');
+        const images = [
+            "{{ asset('images/Login-1.jpg') }}",
+            "{{ asset('images/Login-2.jpg') }}",
+            "{{ asset('images/Login-3.jpg') }}",
+            "{{ asset('images/Login-4.jpg') }}",
+        ];
+        let index = 0;
+
+        function changeBackground() {
+            const img = new Image();
+            img.src = images[index];
+            img.onload = () => {
+                background.style.backgroundImage = `url('${images[index]}')`;
+                background.style.transition = 'background-image 1s ease-in-out';
+                index = (index + 1) % images.length;
+            }
+        }
+
+        changeBackground();
+        setInterval(changeBackground, 8000);
+    </script>
+</x-guest-layout>

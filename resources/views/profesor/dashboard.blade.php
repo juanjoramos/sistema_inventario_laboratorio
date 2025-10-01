@@ -12,6 +12,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <!-- Bienvenida -->
             <div class="bg-[#293a52] shadow-md sm:rounded-lg p-6">
                 <h1 class="text-2xl font-bold mb-2 text-white">Bienvenido Profesor 👨‍🏫</h1>
                 <p class="text-gray-300">
@@ -19,6 +20,7 @@
                 </p>
             </div>
 
+            <!-- Mis Reservas -->
             <div class="bg-[#293a52] shadow-md sm:rounded-lg p-6">
                 <h3 class="text-lg font-bold mb-4 text-white">📋 Mis Reservas</h3>
 
@@ -32,6 +34,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Estado</th>
                                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Fecha Reserva</th>
                                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Devolución Prevista</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Acción</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-700">
@@ -53,16 +56,29 @@
                                             <span class="px-3 py-1 text-xs font-semibold text-gray-800 bg-gray-200 rounded-full">Desconocido</span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-100">
-                                        {{ $reserva->created_at->format('d/m/Y H:i') }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-100">
-                                        {{ \Carbon\Carbon::parse($reserva->fecha_devolucion_prevista)->format('d/m/Y') }}
+                                    <td class="px-6 py-4 text-sm text-gray-100">{{ $reserva->created_at->format('d/m/Y H:i') }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-100">{{ \Carbon\Carbon::parse($reserva->fecha_devolucion_prevista)->format('d/m/Y') }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-100 text-center">
+                                        @if($reserva->estado === 'pendiente')
+                                            <form action="{{ route('reservas.cancelar', $reserva) }}" method="POST" onsubmit="return confirm('¿Deseas cancelar esta reserva?');">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded shadow text-sm">
+                                                    Cancelar
+                                                </button>
+                                            </form>
+                                        @elseif($reserva->estado === 'devuelto')
+                                            <span class="px-3 py-1 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
+                                                Devuelto
+                                            </span>
+                                        @else
+                                            <span class="text-gray-400 italic">--</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="px-6 py-4 text-center text-gray-300">
+                                    <td colspan="7" class="px-6 py-4 text-center text-gray-300">
                                         No tienes reservas aún.
                                     </td>
                                 </tr>

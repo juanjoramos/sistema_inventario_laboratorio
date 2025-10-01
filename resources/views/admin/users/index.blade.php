@@ -56,7 +56,7 @@
                             <td class="border px-4 py-2 text-center">
                                 <div class="flex justify-center gap-2">
                                     <a href="{{ route('users.edit', $user) }}"
-                                       class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
+                                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
                                         ✏️ Editar
                                     </a>
                                     <form action="{{ route('users.destroy', $user) }}" method="POST" onsubmit="return confirm('¿Eliminar este usuario?')">
@@ -79,6 +79,9 @@
                     @endforelse
                 </tbody>
             </table>
+            <div class="mt-4 px-4 py-2">
+                {{ $users->links('pagination::tailwind') }}
+            </div>
         </div>
     </div>
 </x-app-layout>

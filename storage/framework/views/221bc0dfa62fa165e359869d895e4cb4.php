@@ -65,7 +65,7 @@
                             <td class="border px-4 py-2 text-center">
                                 <div class="flex justify-center gap-2">
                                     <a href="<?php echo e(route('users.edit', $user)); ?>"
-                                       class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
+                                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
                                         ✏️ Editar
                                     </a>
                                     <form action="<?php echo e(route('users.destroy', $user)); ?>" method="POST" onsubmit="return confirm('¿Eliminar este usuario?')">
@@ -88,6 +88,10 @@
                     <?php endif; ?>
                 </tbody>
             </table>
+            <div class="mt-4 px-4 py-2">
+                <?php echo e($users->links('pagination::tailwind')); ?>
+
+            </div>
         </div>
     </div>
  <?php echo $__env->renderComponent(); ?>

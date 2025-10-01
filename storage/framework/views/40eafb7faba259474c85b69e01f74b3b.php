@@ -31,10 +31,6 @@
                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow">
                         ➕ Agregar Ítem
                     </a>
-                    <a href="<?php echo e(route('admin.reservas.index')); ?>" 
-                    class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow">
-                    📋 Ver Reservas
-                    </a>
                 </div>
 
                 <?php if($items->isEmpty()): ?>

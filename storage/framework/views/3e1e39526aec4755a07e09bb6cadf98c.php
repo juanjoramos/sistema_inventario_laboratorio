@@ -6,7 +6,6 @@
     <title>Sistema de Inventarios - I.U. Pascual Bravo</title>
     <link rel="icon" type="image/png" href="<?php echo e(asset('images/Logo_1.svg')); ?>"style="background-color:#fff;">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fuente formal -->
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,19 +19,16 @@
 <body class="antialiased bg-white text-gray-900">
     <div class="min-h-screen flex flex-col justify-between">
 
-        <!-- HEADER -->
         <header class="sticky top-0 z-50" style="background-color:#fff;">
             <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                <!-- Título institucional -->
                <h1 class="flex items-center gap-3 text-2xl font-bold tracking-wide" style="color:#293a52;">
                     <img src="<?php echo e(asset('images/Logo_1.png')); ?>" alt="Logo" class="h-8 w-8 color-black rounded"    >
                     Inventario de Laboratorios
                 </h1>
 
-                <!-- Menú -->
                 <nav class="space-x-6 font-semibold">
                     <?php if(auth()->guard()->check()): ?>
-                        <a href="<?php echo e(url('/dashboard')); ?>" class="text-white hover:text-gray-300 transition">Dashboard</a>
+                        <a href="<?php echo e(url('/dashboard')); ?>" class="text-black hover:text-gray-300 transition">Dashboard</a>
                     <?php else: ?>
                         <a href="<?php echo e(route('login')); ?>" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow transition">Iniciar sesión</a>
                     <?php endif; ?>
@@ -40,7 +36,6 @@
             </div>
         </header>
 
-        <!-- HERO -->
         <main class="flex-grow">
             <section class="relative text-center py-20 px-6 bg-gray-100" style="background-color:#293a52">
                 <h2 class="text-4xl font-extrabold mb-4 text-gray-900 text-white">Sistema de Inventarios</h2>
@@ -49,21 +44,18 @@
                 </p>
             </section>
 
-            <!-- PÁRRAFOS EN CARDS -->
             <section id="modulos" class="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-3 gap-8">
                 <div id="reactivos" class="bg-white border border-gray-200 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
                     <h3 class="text-xl font-semibold mb-3 text-blue-900 text-center">🧪 Reactivos</h3>
-                    <p class="text-gray-700">Controla el stock, las fechas de vencimiento y el uso seguro de los reactivos.</p>
+                    <p class="text-gray-700 text-center">Controla el stock, las fechas de vencimiento y el uso seguro de los reactivos.</p>
                 </div>
                 <div id="equipos" class="bg-white border border-gray-200 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
                     <h3 class="text-xl font-semibold mb-3 text-blue-900 text-center">⚙️ Equipos</h3>
-                    <p class="text-gray-700">Registra y gestiona el préstamo de equipos de laboratorio de manera organizada.</p>
+                    <p class="text-gray-700 text-center">Registra y gestiona el préstamo de equipos de laboratorio de manera organizada.</p>
                 </div>
                 <div id="materiales" class="bg-white border border-gray-200 rounded-2xl p-8 shadow-md hover:shadow-lg transition">
                     <h3 class="text-xl font-semibold mb-3 text-blue-900 text-center">📦 Materiales</h3>
-                    <p class="text-gray-700">Administra materiales de uso general para garantizar la disponibilidad continua en los laboratorios.</p>
+                    <p class="text-gray-700 text-center">Administra materiales de uso general para garantizar la disponibilidad continua en los laboratorios.</p>
                 </div>
             </section>
-        </main>
-    <
-<?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/welcome.blade.php ENDPATH**/ ?>
+        </main><?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/welcome.blade.php ENDPATH**/ ?>

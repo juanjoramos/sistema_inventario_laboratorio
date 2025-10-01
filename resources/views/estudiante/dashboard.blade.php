@@ -56,17 +56,21 @@
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-100">{{ $reserva->created_at->format('d/m/Y H:i') }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-100">{{ \Carbon\Carbon::parse($reserva->fecha_devolucion_prevista)->format('d/m/Y') }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-100">
-                                        @if($reserva->estado === 'entregado')
-                                            <form action="{{ route('reservas.devolver', $reserva) }}" method="POST" onsubmit="return confirm('¿Deseas devolver este ítem?');">
+                                    <td class="px-6 py-4 text-sm text-gray-100 text-center">
+                                        @if($reserva->estado === 'pendiente')
+                                            <form action="{{ route('reservas.cancelar', $reserva) }}" method="POST" onsubmit="return confirm('¿Deseas cancelar esta reserva?');">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded shadow">
-                                                    Devolver
+                                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded shadow text-sm">
+                                                    Cancelar
                                                 </button>
                                             </form>
+                                        @elseif($reserva->estado === 'devuelto')
+                                            <span class="px-3 py-1 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
+                                                Devuelto
+                                            </span>
                                         @else
-                                            <span class="text-gray-400">--</span>
+                                            <span class="text-gray-400 italic">--</span>
                                         @endif
                                     </td>
                                 </tr>
