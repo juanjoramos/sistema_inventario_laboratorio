@@ -19,77 +19,84 @@
         </div>
      <?php $__env->endSlot(); ?>
 
-    <div class="py-8">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 p-8 shadow-lg rounded-xl border border-gray-200 dark:border-gray-700">
-                <form action="<?php echo e(route('items.store')); ?>" method="POST" class="space-y-6">
-                    <?php echo csrf_field(); ?>
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
-                        <input type="text" name="nombre" 
-                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Código</label>
-                        <input type="text" name="codigo" 
-                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Categoría</label>
-                        <select name="categoria" 
-                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                            <option value="">Seleccione una categoría</option>
-                            <option value="Equipos">Equipos</option>
-                            <option value="Reactivos">Reactivos</option>
-                            <option value="Materiales">Materiales</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Cantidad</label>
-                        <input type="number" name="cantidad" min="0"
-                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Ubicación</label>
-                        <input type="text" name="ubicacion"
-                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Proveedor</label>
-                        <input type="text" name="proveedor"
-                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Fecha de vencimiento</label>
-                        <input type="date" name="fecha_vencimiento"
-                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Umbral mínimo</label>
-                        <input type="number" name="umbral_minimo" value="5" min="1"
-                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="flex space-x-3 pt-4">
-                        <button type="submit" 
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow-md font-medium transition">
-                            Guardar
-                        </button>
-                        <a href="<?php echo e(route('dashboard.admin')); ?>" 
-                            class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg shadow-md font-medium transition">
-                            Cancelar
-                        </a>
-                    </div>
-                </form>
+    <div class="p-6">
+        <?php if($errors->any()): ?>
+            <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-sm">
+                <ul class="list-disc list-inside space-y-1">
+                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><?php echo e($error); ?></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </ul>
             </div>
-        </div>
+        <?php endif; ?>
+
+        <form action="<?php echo e(route('items.store')); ?>" method="POST" class="bg-white p-6 rounded-lg shadow-md border border-gray-200 max-w-lg mx-auto">
+            <?php echo csrf_field(); ?>
+
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre</label>
+                <input type="text" name="nombre" required
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Código</label>
+                <input type="text" name="codigo" required
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Categoría</label>
+                <select name="categoria" required
+                        class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                    <option value="">Seleccione una categoría</option>
+                    <option value="Equipos">Equipos</option>
+                    <option value="Reactivos">Reactivos</option>
+                    <option value="Materiales">Materiales</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Cantidad</label>
+                <input type="number" name="cantidad" min="0" required
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Ubicación</label>
+                <input type="text" name="ubicacion"
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Proveedor</label>
+                <input type="text" name="proveedor"
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Fecha de vencimiento</label>
+                <input type="date" name="fecha_vencimiento"
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Umbral mínimo</label>
+                <input type="number" name="umbral_minimo" value="5" min="1"
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <button type="submit"
+                        class="bg-[#293a52] hover:bg-[#1e2c42] text-white font-semibold px-6 py-2 rounded-lg shadow-md transition">
+                    Guardar
+                </button>
+                <a href="<?php echo e(route('dashboard.admin')); ?>"
+                   class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg shadow-md font-semibold transition">
+                    Cancelar
+                </a>
+            </div>
+        </form>
     </div>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -100,5 +107,4 @@
 <?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?>
-<?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/items/create.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/items/create.blade.php ENDPATH**/ ?>

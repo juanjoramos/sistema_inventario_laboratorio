@@ -9,21 +9,14 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AlertaController;
+use App\Http\Controllers\ReporteController;
 
-/*
-|-------------------------------------------------------------------------- 
-| Página de inicio
-|-------------------------------------------------------------------------- 
-*/
+//Página de inicio
 Route::get('/', function () {
     return view('welcome');
 });
 
-/*
-|-------------------------------------------------------------------------- 
-| Dashboard por rol (redirección automática)
-|-------------------------------------------------------------------------- 
-*/
+//Dashboard por rol (redirección automática)
 Route::get('/dashboard', function () {
     $user = Auth::user()?->load('roles');
 
@@ -47,27 +40,15 @@ Route::get('/dashboard', function () {
     return redirect()->route('dashboard.selector');
 })->middleware('auth')->name('dashboard');
 
-/*
-|-------------------------------------------------------------------------- 
-| Rutas protegidas (cualquier usuario logueado)
-|-------------------------------------------------------------------------- 
-*/
+//Rutas protegidas (cualquier usuario logueado)
 Route::middleware('auth')->group(function () {
 
-    /*
-    |-------------------------
-    | 👤 Perfil
-    |-------------------------
-    */
+//Perfil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    /*
-    |-------------------------
-    | 📊 Dashboards
-    |-------------------------
-    */
+//Dashboards
     Route::get('/admin/dashboard', [ItemController::class, 'adminDashboard'])->name('dashboard.admin');
 
     Route::get('/profesor/dashboard', function () {
@@ -88,11 +69,7 @@ Route::middleware('auth')->group(function () {
         return view('estudiante.dashboard', compact('items', 'reservas'));
     })->name('dashboard.estudiante');
 
-    /*
-    |-------------------------
-    | 📌 Reservas
-    |-------------------------
-    */
+//Reservas
     Route::get('/reservas/estudiante', function () {
         $items = \App\Models\Item::all();
         return view('reservas.estudiante', compact('items'));
@@ -117,30 +94,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/reservas/{reserva}/cancelar', [ReservaController::class, 'cancelar'])->name('reservas.cancelar');
     Route::patch('/reservas/{reserva}/devolver', [ReservaController::class, 'devolver'])->name('reservas.devolver');
 
-    /*
-    |-------------------------
-    | 📦 Items
-    |-------------------------
-    */
+//Items
     Route::resource('items', ItemController::class);
     Route::get('/items/{item}/edit-stock', [ItemController::class, 'editStock'])->name('items.editStock');
     Route::post('/items/{item}/update-stock', [ItemController::class, 'updateStock'])->name('items.updateStock');
 
-    /*
-    |-------------------------
-    | 🛠️ Reservas gestionadas por Admin
-    |-------------------------
-    */
+//Reservas gestionadas por Admin
     Route::get('/admin/reservas', [ReservaController::class, 'index'])->name('admin.reservas.index');
     Route::patch('/admin/reservas/{reserva}/aprobar', [ReservaController::class, 'aprobar'])->name('admin.reservas.aprobar');
     Route::patch('/admin/reservas/{reserva}/rechazar', [ReservaController::class, 'rechazar'])->name('admin.reservas.rechazar');
     Route::patch('/admin/reservas/{reserva}/devolver', [ReservaController::class, 'devolver'])->name('admin.reservas.devolver');
 
-    /*
-    |-------------------------
-    | 🔀 Selector de rol
-    |-------------------------
-    */
+//Selector de rol
     Route::get('/seleccionar-rol', function () {
         $user = Auth::user()->load('roles');
         return view('auth.seleccionar-rol', compact('user'));
@@ -167,30 +132,43 @@ Route::middleware('auth')->group(function () {
     })->name('cambiar-rol');
 });
 
-/*
-|-------------------------------------------------------------------------- 
-| 👑 Admin gestiona usuarios
-|-------------------------------------------------------------------------- 
-*/
-Route::middleware(['auth', 'isAdmin'])->group(function () {
-    Route::resource('users', UserController::class);
-});
 
+//Rutas solo para administradores
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::resource('users', UserController::class);
-});
 
-Route::middleware(['auth', 'isAdmin'])->group(function () {
-    Route::get('reservas', [ReservaController::class, 'index'])->name('reservas.index');
+    Route::get('/reservas', [ReservaController::class, 'index'])->name('reservas.index');
     Route::resource('reservas', ReservaController::class);
+
+/* -------------------- REPORTES -------------------- */
+// Formulario de selección
+Route::get('/admin/reportes', [ReporteController::class, 'formulario'])
+    ->name('admin.reportes.formulario');
+
+// Generar reporte (POST – cuando el formulario usa method="POST")
+Route::post('/admin/reportes/generar', [ReporteController::class, 'generar'])
+    ->name('admin.reportes.generar');
+
+// Generar reporte (GET – si lo llamas por enlace o botón)
+Route::get('/admin/reportes/generar/{tipo}/{periodo}', [ReporteController::class, 'generarConParametros'])
+    ->where([
+        'tipo' => 'stock|prestamos|consumo_reactivos|equipos_usados',
+        'periodo' => 'diario|semanal|mensual',
+    ])
+    ->name('admin.reportes.generar.param');
+
+//Exportar reporte en PDF
+Route::get('/admin/reportes/pdf/{tipo}/{periodo}', [ReporteController::class, 'exportarPDF'])
+    ->where([
+        'tipo' => 'stock|prestamos|consumo_reactivos|equipos_usados',
+        'periodo' => 'diario|semanal|mensual',
+    ])
+    ->name('admin.reportes.pdf');
+
 });
 
-/*
-|-------------------------------------------------------------------------- 
-| 🔔 Alertas (solo admin)
-|-------------------------------------------------------------------------- 
-*/
+//Alertas (solo admin)
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/alertas', [AlertaController::class, 'index'])->name('alertas.index');
     Route::post('/admin/alertas', [AlertaController::class, 'store'])->name('alertas.store');
@@ -202,11 +180,8 @@ Route::get('/alertas/estadisticas', [AlertaController::class, 'estadisticas'])
     ->name('alertas.estadisticas')
     ->middleware('auth');
 
-/*
-|-------------------------------------------------------------------------- 
-| Historial Auditoría (solo admin)
-|-------------------------------------------------------------------------- 
-*/
+//Historial Auditoría (solo admin)
 Route::get('/admin/auditoria', [UserController::class, 'auditoria'])->name('admin.auditoria');
+
 
 require __DIR__.'/auth.php';

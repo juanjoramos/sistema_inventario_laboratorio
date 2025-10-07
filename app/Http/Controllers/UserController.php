@@ -58,7 +58,7 @@ class UserController extends Controller
             'accion'          => 'crear',
             'modelo_afectado' => 'User',
             'modelo_id'       => $user->id,
-            'descripcion'     => "Se creó el usuario {$user->name}",
+            'descripcion'     => "Se creó el usuario {$user->email}",
             'datos_nuevos'    => array_merge(
                 $user->toArray(),
                 ['roles' => $user->roles->pluck('name')->toArray()]
@@ -117,7 +117,7 @@ class UserController extends Controller
             'accion'           => 'actualizar',
             'modelo_afectado'  => 'User',
             'modelo_id'        => $user->id,
-            'descripcion'      => "Se actualizó el usuario {$user->name}",
+            'descripcion'      => "Se actualizó el usuario {$user->email}",
             'datos_anteriores' => $datos_anteriores,
             'datos_nuevos'     => $datos_nuevos,
         ]);
@@ -132,7 +132,7 @@ class UserController extends Controller
             ['roles' => $user->roles->pluck('name')->toArray()]
         );
 
-        $nombre = $user->name;
+        $email = $user->email;
 
         $user->delete();
 
@@ -141,7 +141,7 @@ class UserController extends Controller
             'accion'           => 'eliminar',
             'modelo_afectado'  => 'User',
             'modelo_id'        => $user->id,
-            'descripcion'      => "Se eliminó el usuario {$nombre}",
+            'descripcion'      => "Se eliminó el usuario {$email}",
             'datos_anteriores' => $datos_anteriores,
         ]);
 

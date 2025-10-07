@@ -19,9 +19,9 @@
         </div>
      <?php $__env->endSlot(); ?>
 
-    <div class="py-6">
+    <div class="py-6" x-data="{ openModalId: null }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-900 shadow-md sm:rounded-lg p-6">
+            <div class="shadow-md sm:rounded-lg p-6" style="background-color:#293a52">
                 <div class="flex justify-between items-center mb-4">
                     <a href="<?php echo e(route('items.create')); ?>" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
                         ➕ Nuevo ítem
@@ -77,15 +77,46 @@
                                                 Stock
                                             </a>
 
-                                            <form action="<?php echo e(route('items.destroy', $item->id)); ?>" method="POST"
-                                                  onsubmit="return confirm('¿Seguro que deseas eliminar este ítem?')">
-                                                <?php echo csrf_field(); ?>
-                                                <?php echo method_field('DELETE'); ?>
-                                                <button type="submit"
-                                                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
-                                                    Eliminar
-                                                </button>
-                                            </form>
+                                            <button @click="openModalId = <?php echo e($item->id); ?>" type="button" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                                                Eliminar
+                                            </button>
+
+                                            <!-- Modal -->
+                                            <div 
+                                                x-show="openModalId === <?php echo e($item->id); ?>" 
+                                                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" 
+                                                x-cloak>
+                                                
+                                                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+                                                    <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center gap-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                        Confirmar eliminación
+                                                    </h3>
+                                                    <p class="text-gray-600 dark:text-gray-300">
+                                                        ¿Estás seguro de que deseas eliminar <strong><?php echo e($item->nombre); ?></strong>? Esta acción no se puede deshacer.
+                                                    </p>
+
+                                                    <div class="mt-4 flex justify-end gap-3">
+                                                        <button 
+                                                            @click="openModalId = null"
+                                                            class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded">
+                                                            Cancelar
+                                                        </button>
+
+                                                        <form action="<?php echo e(route('items.destroy', $item->id)); ?>" method="POST">
+                                                            <?php echo csrf_field(); ?>
+                                                            <?php echo method_field('DELETE'); ?>
+                                                            <button type="submit"
+                                                                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded">
+                                                                Eliminar
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Fin del modal -->
                                         </div>
                                     </td>
                                 </tr>

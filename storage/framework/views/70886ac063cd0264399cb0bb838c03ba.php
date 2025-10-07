@@ -215,7 +215,7 @@
         }
 
         changeBackground();
-        setInterval(changeBackground, 8000);
+        setInterval(changeBackground, 6000);
     </script>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

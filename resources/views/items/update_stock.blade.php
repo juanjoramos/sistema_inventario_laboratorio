@@ -10,18 +10,16 @@
         </div>
     </x-slot>
 
-    <div class="p-6 max-w-4xl mx-auto">
-        {{-- Mensajes de éxito --}}
+    <div class="p-6 max-w-xl mx-auto">
         @if(session('success'))
-            <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-800 rounded">
+            <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-800 rounded-lg shadow-sm">
                 {{ session('success') }}
             </div>
         @endif
 
-        {{-- Mensajes de error --}}
         @if($errors->any())
-            <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                <ul class="list-disc list-inside">
+            <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-sm">
+                <ul class="list-disc list-inside space-y-1">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -29,54 +27,46 @@
             </div>
         @endif
 
-        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6">
-            <form method="POST" action="{{ route('items.updateStock', $item) }}">
-                @csrf
+        <form method="POST" action="{{ route('items.updateStock', $item) }}" class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+            @csrf
 
-                {{-- Tipo de movimiento --}}
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        Tipo de movimiento
-                    </label>
-                    <select name="tipo" class="mt-1 block w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300" required>
-                        <option value="entrada">Entrada (Agregar)</option>
-                        <option value="salida">Salida (Retirar)</option>
-                    </select>
-                </div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                    Tipo de movimiento
+                </label>
+                <select name="tipo" required
+                        class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                    <option value="entrada">Entrada (Agregar)</option>
+                    <option value="salida">Salida (Retirar)</option>
+                </select>
+            </div>
 
-                {{-- Cantidad --}}
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        Cantidad
-                    </label>
-                    <input type="number" 
-                           name="cantidad" 
-                           min="1" 
-                           required 
-                           class="mt-1 block w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300">
-                </div>
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                    Cantidad
+                </label>
+                <input type="number" name="cantidad" min="1" required
+                       class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+            </div>
 
-                {{-- Descripción --}}
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        Descripción (opcional)
-                    </label>
-                    <textarea name="descripcion" rows="3" 
-                              class="mt-1 block w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300"></textarea>
-                </div>
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">
+                    Descripción (opcional)
+                </label>
+                <textarea name="descripcion" rows="3"
+                          class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]"></textarea>
+            </div>
 
-                {{-- Botones --}}
-                <div class="flex justify-start gap-3">
-                    <button type="submit" 
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">
-                        Actualizar
-                    </button>
-                    <a href="{{ route('items.index') }}" 
-                       class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded shadow">
-                        Cancelar
-                    </a>
-                </div>
-            </form>
-        </div>
+            <div class="flex justify-end gap-3">
+                <button type="submit"
+                        class="bg-[#293a52] hover:bg-[#1e2c42] text-white font-semibold px-6 py-2 rounded-lg shadow-md transition">
+                    Actualizar
+                </button>
+                <a href="{{ route('items.index') }}"
+                   class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition">
+                    Cancelar
+                </a>
+            </div>
+        </form>
     </div>
 </x-app-layout>

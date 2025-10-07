@@ -53,6 +53,7 @@
                         <thead>
                             <tr class="bg-[#1f2a3a]">
                                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Nombre</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Categoria</th>
                                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Cantidad</th>
                                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Ubicación</th>
                                 <th class="px-6 py-3 text-left text-xs font-semibold text-gray-200 uppercase">Acción</th>
@@ -62,6 +63,19 @@
                             <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr class="hover:bg-[#36455e] transition">
                                     <td class="px-6 py-4 text-sm text-gray-100"><?php echo e($item->nombre); ?></td>
+                                    <td class="px-6 py-4 text-sm text-gray-100">
+                                        <?php
+                                            $colores = [
+                                                'Equipos' => 'bg-indigo-500',
+                                                'Reactivos' => 'bg-green-500',
+                                                'Materiales' => 'bg-yellow-500',
+                                            ];
+                                        ?>
+                                        <span class="px-2 py-1 rounded text-white text-xs font-semibold <?php echo e($colores[$item->categoria] ?? 'bg-gray-500'); ?>">
+                                            <?php echo e(ucfirst($item->categoria)); ?>
+
+                                        </span>
+                                    </td>
                                     <td class="px-6 py-4 text-sm text-gray-100"><?php echo e($item->cantidad); ?></td>
                                     <td class="px-6 py-4 text-sm text-gray-100"><?php echo e($item->ubicacion); ?></td>
                                     <td class="px-6 py-4 text-sm text-center">

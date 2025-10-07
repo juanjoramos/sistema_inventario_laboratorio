@@ -30,6 +30,12 @@
                         </x-nav-link>
                     @endif
 
+                    @if(Auth::user()->roles->contains('name', 'admin'))
+                        <x-nav-link class="text-white hover:text-white" :href="route('admin.reportes.formulario')" :active="request()->routeIs('admin.reportes.formulario')">
+                            {{ __('Reportes') }}
+                        </x-nav-link>
+                    @endif
+
                     @if (!request()->routeIs('dashboard.selector'))
                         @if(session('selected_role') === 'profesor')
                             <x-nav-link class="text-white" :href="route('reservas.profesor')" :active="request()->routeIs('reservas.profesor')">

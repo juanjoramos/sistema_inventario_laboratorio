@@ -23,8 +23,6 @@ class IsAdmin
         }
 
         // Verifica si el usuario tiene el rol 'admin'
-        // Asegúrate de que tu modelo User tenga la relación roles:
-        // public function roles() { return $this->belongsToMany(Role::class); }
         $user = Auth::user();
 
         if (!$user->roles || !$user->roles->contains('name', 'admin')) {

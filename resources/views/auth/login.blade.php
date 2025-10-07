@@ -75,6 +75,6 @@
         }
 
         changeBackground();
-        setInterval(changeBackground, 8000);
+        setInterval(changeBackground, 6000);
     </script>
 </x-guest-layout>

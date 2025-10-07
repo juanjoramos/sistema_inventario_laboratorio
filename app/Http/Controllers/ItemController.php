@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Reserva;
 use App\Models\Transaccion;
 use App\Models\Alerta;
 use Illuminate\Http\Request;
@@ -58,8 +59,9 @@ class ItemController extends Controller
     public function show(Item $item)
     {
             $transacciones = $item->transacciones()
-                      ->orderByDesc('created_at')
-                      ->paginate(10, ['*'], 'transacciones_page');
+                ->with('user')
+                ->orderByDesc('created_at')
+                ->paginate(10, ['*'], 'transacciones_page');
 
             $reservas = $item->reservas()
                  ->with('user')
@@ -132,7 +134,20 @@ class ItemController extends Controller
     public function adminDashboard()
     {
         $items = Item::whereColumn('cantidad', '<=', 'umbral_minimo')->get();
-        return view('admin.dashboard', compact('items'));
+
+        // Datos adicionales para enriquecer el dashboard
+        $totalItems = Item::count();
+        $lowStockCount = Item::whereColumn('cantidad', '<=', 'umbral_minimo')->count();
+        $reservasPendientes = Reserva::where('estado', 'pendiente')->count();
+        $ultimasReservas = Reserva::with('user', 'item')->latest()->take(5)->get();
+
+        return view('admin.dashboard', compact(
+            'items',
+            'totalItems',
+            'lowStockCount',
+            'reservasPendientes',
+            'ultimasReservas'
+        ));
     }
 
     // Vista para estudiantes: muestra ítems disponibles.

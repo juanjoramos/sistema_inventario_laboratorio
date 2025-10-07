@@ -4,21 +4,18 @@
     </x-slot>
 
     <div class="max-w-6xl mx-auto py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Pendientes -->
         <div class="bg-yellow-100 text-yellow-800 rounded-xl shadow p-6">
             <h3 class="text-lg font-semibold mb-2">Pendientes</h3>
             <p class="text-3xl font-bold">{{ $pendientes }}</p>
             <p class="text-sm">({{ round($porcentajePendientes, 2) }}%) del total</p>
         </div>
 
-        <!-- Atendidas -->
         <div class="bg-green-100 text-green-800 rounded-xl shadow p-6">
             <h3 class="text-lg font-semibold mb-2">Atendidas</h3>
             <p class="text-3xl font-bold">{{ $atendidas }}</p>
             <p class="text-sm">({{ round($porcentajeAtendidas, 2) }}%) del total</p>
         </div>
 
-        <!-- Gráfico circular -->
         <div class="col-span-1 md:col-span-2 mt-6">
             <canvas id="alertasChart" class="w-full"></canvas>
         </div>

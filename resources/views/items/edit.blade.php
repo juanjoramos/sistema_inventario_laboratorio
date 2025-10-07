@@ -11,11 +11,10 @@
     </x-slot>
 
     <div class="p-6">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            {{-- Mensajes de error --}}
+        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             @if ($errors->any())
-                <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                    <ul class="list-disc list-inside">
+                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-sm">
+                    <ul class="list-disc list-inside space-y-1">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -23,75 +22,74 @@
                 </div>
             @endif
 
-            <div class="bg-white dark:bg-gray-800 p-6 shadow rounded-lg">
-                <form action="{{ route('items.update', $item->id) }}" method="POST" class="space-y-4">
-                    @csrf
-                    @method('PUT')
+            <form action="{{ route('items.update', $item->id) }}" method="POST" class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                @csrf
+                @method('PUT')
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Nombre</label>
-                        <input type="text" name="nombre" value="{{ old('nombre', $item->nombre) }}" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300" required>
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre</label>
+                    <input type="text" name="nombre" value="{{ old('nombre', $item->nombre) }}" required
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Código</label>
-                        <input type="text" name="codigo" value="{{ old('codigo', $item->codigo) }}" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300" required>
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Código</label>
+                    <input type="text" name="codigo" value="{{ old('codigo', $item->codigo) }}" required
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Categoría</label>
-                        <select name="categoria" class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300" required>
-                            <option value="">Seleccione una categoría</option>
-                            <option value="Equipos" {{ old('categoria', $item->categoria) == 'Equipos' ? 'selected' : '' }}>Equipos</option>
-                            <option value="Reactivos" {{ old('categoria', $item->categoria) == 'Reactivos' ? 'selected' : '' }}>Reactivos</option>
-                            <option value="Materiales" {{ old('categoria', $item->categoria) == 'Materiales' ? 'selected' : '' }}>Materiales</option>
-                        </select>
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Categoría</label>
+                    <select name="categoria" required
+                            class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                        <option value="">Seleccione una categoría</option>
+                        <option value="Equipos" {{ old('categoria', $item->categoria) == 'Equipos' ? 'selected' : '' }}>Equipos</option>
+                        <option value="Reactivos" {{ old('categoria', $item->categoria) == 'Reactivos' ? 'selected' : '' }}>Reactivos</option>
+                        <option value="Materiales" {{ old('categoria', $item->categoria) == 'Materiales' ? 'selected' : '' }}>Materiales</option>
+                    </select>
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Cantidad</label>
-                        <input type="number" name="cantidad" value="{{ old('cantidad', $item->cantidad) }}" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300" min="0" required>
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Cantidad</label>
+                    <input type="number" name="cantidad" value="{{ old('cantidad', $item->cantidad) }}" min="0" required
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Ubicación</label>
-                        <input type="text" name="ubicacion" value="{{ old('ubicacion', $item->ubicacion) }}" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300">
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Ubicación</label>
+                    <input type="text" name="ubicacion" value="{{ old('ubicacion', $item->ubicacion) }}"
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Proveedor</label>
-                        <input type="text" name="proveedor" value="{{ old('proveedor', $item->proveedor) }}" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300">
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Proveedor</label>
+                    <input type="text" name="proveedor" value="{{ old('proveedor', $item->proveedor) }}"
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Fecha de vencimiento</label>
-                        <input type="date" name="fecha_vencimiento" value="{{ old('fecha_vencimiento', $item->fecha_vencimiento) }}" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300">
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Fecha de vencimiento</label>
+                    <input type="date" name="fecha_vencimiento" value="{{ old('fecha_vencimiento', $item->fecha_vencimiento) }}"
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Umbral mínimo</label>
-                        <input type="number" name="umbral_minimo" value="{{ old('umbral_minimo', $item->umbral_minimo) }}" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300" min="1">
-                    </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Umbral mínimo</label>
+                    <input type="number" name="umbral_minimo" value="{{ old('umbral_minimo', $item->umbral_minimo) }}" min="1"
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div class="flex justify-start gap-3">
-                        <button type="submit" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">
-                            Actualizar
-                        </button>
-                        <a href="{{ route('items.index') }}" 
-                           class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded shadow">
-                            Cancelar
-                        </a>
-                    </div>
-                </form>
-            </div>
+                <div class="flex justify-end gap-3">
+                    <button type="submit"
+                            class="bg-[#293a52] hover:bg-[#1e2c42] text-white font-semibold px-6 py-2 rounded-lg shadow-md transition">
+                        Actualizar
+                    </button>
+                    <a href="{{ route('items.index') }}"
+                       class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
 </x-app-layout>

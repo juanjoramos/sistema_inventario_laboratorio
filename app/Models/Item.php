@@ -21,10 +21,9 @@ class Item extends Model
         'umbral_minimo',
     ];
 
-    // Relación: un Item tiene muchas transacciones
     public function transacciones()
     {
-        return $this->hasMany(Transaccion::class);
+        return $this->hasMany(Transaccion::class, 'item_id');
     }
 
     public function reservas()

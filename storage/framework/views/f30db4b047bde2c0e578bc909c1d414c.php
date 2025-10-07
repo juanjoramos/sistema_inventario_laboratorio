@@ -81,22 +81,22 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-white">
-                                    <?php $__currentLoopData = $transacciones; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <tr>
-                                            <td class="px-4 py-2"><?php echo e($t->created_at->format('d/m/Y H:i')); ?></td>
-                                            <td class="px-4 py-2 capitalize"><?php echo e($t->tipo); ?></td>
-                                            <td class="px-4 py-2"><?php echo e($t->cantidad); ?></td>
-                                            <td class="px-4 py-2">
-                                                <?php if($t->usuario): ?>
-                                                    Prestado por <?php echo e($t->usuario->email); ?>
+                                <?php $__currentLoopData = $transacciones; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <tr>
+                                        <td class="px-4 py-2"><?php echo e($t->created_at->format('d/m/Y H:i')); ?></td>
+                                        <td class="px-4 py-2 capitalize"><?php echo e($t->tipo); ?></td>
+                                        <td class="px-4 py-2"><?php echo e($t->cantidad); ?></td>
+                                        <td class="px-4 py-2">
+                                            <?php if($t->user): ?>
+                                                Préstamo por usuario <?php echo e($t->user->email); ?>
 
-                                                <?php else: ?>
-                                                    <?php echo e($t->descripcion); ?>
+                                            <?php else: ?>
+                                                <?php echo e($t->descripcion ?? 'Usuario eliminado'); ?>
 
-                                                <?php endif; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </tbody>
                             </table>
                         </div>
@@ -143,7 +143,7 @@
                                             <td class="px-4 py-2">
                                                 <?php switch($reserva->estado):
                                                     case ('pendiente'): ?> <span class="text-yellow-400">Pendiente</span> <?php break; ?>
-                                                    <?php case ('entregado'): ?>  <span class="text-blue-400">Entregado</span> <?php break; ?>
+                                                    <?php case ('prestado'): ?>  <span class="text-blue-400">Prestado</span> <?php break; ?>
                                                     <?php case ('devuelto'): ?>  <span class="text-green-500">Devuelto</span> <?php break; ?>
                                                     <?php case ('cancelado'): ?> <span class="text-red-500">Cancelado</span> <?php break; ?>
                                                     <?php default: ?> <span class="text-gray-400"><?php echo e($reserva->estado); ?></span>
@@ -244,7 +244,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('alertasChart').getContext('2d');
             new Chart(ctx, {
-                type: 'doughnut', // bar grafico de barras o doughnut grafico circular
+                type: 'bar', // bar grafico de barras o doughnut grafico circular
                 data: {
                     labels: ['Pendientes', 'Atendidas'],
                     datasets: [{
