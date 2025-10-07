@@ -20,11 +20,10 @@
      <?php $__env->endSlot(); ?>
 
     <div class="p-6">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            
+        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <?php if($errors->any()): ?>
-                <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-                    <ul class="list-disc list-inside">
+                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-sm">
+                    <ul class="list-disc list-inside space-y-1">
                         <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li><?php echo e($error); ?></li>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -32,75 +31,74 @@
                 </div>
             <?php endif; ?>
 
-            <div class="bg-white dark:bg-gray-800 p-6 shadow rounded-lg">
-                <form action="<?php echo e(route('items.update', $item->id)); ?>" method="POST" class="space-y-4">
-                    <?php echo csrf_field(); ?>
-                    <?php echo method_field('PUT'); ?>
+            <form action="<?php echo e(route('items.update', $item->id)); ?>" method="POST" class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Nombre</label>
-                        <input type="text" name="nombre" value="<?php echo e(old('nombre', $item->nombre)); ?>" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300" required>
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre</label>
+                    <input type="text" name="nombre" value="<?php echo e(old('nombre', $item->nombre)); ?>" required
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Código</label>
-                        <input type="text" name="codigo" value="<?php echo e(old('codigo', $item->codigo)); ?>" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300" required>
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Código</label>
+                    <input type="text" name="codigo" value="<?php echo e(old('codigo', $item->codigo)); ?>" required
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Categoría</label>
-                        <select name="categoria" class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300" required>
-                            <option value="">Seleccione una categoría</option>
-                            <option value="Equipos" <?php echo e(old('categoria', $item->categoria) == 'Equipos' ? 'selected' : ''); ?>>Equipos</option>
-                            <option value="Reactivos" <?php echo e(old('categoria', $item->categoria) == 'Reactivos' ? 'selected' : ''); ?>>Reactivos</option>
-                            <option value="Materiales" <?php echo e(old('categoria', $item->categoria) == 'Materiales' ? 'selected' : ''); ?>>Materiales</option>
-                        </select>
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Categoría</label>
+                    <select name="categoria" required
+                            class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                        <option value="">Seleccione una categoría</option>
+                        <option value="Equipos" <?php echo e(old('categoria', $item->categoria) == 'Equipos' ? 'selected' : ''); ?>>Equipos</option>
+                        <option value="Reactivos" <?php echo e(old('categoria', $item->categoria) == 'Reactivos' ? 'selected' : ''); ?>>Reactivos</option>
+                        <option value="Materiales" <?php echo e(old('categoria', $item->categoria) == 'Materiales' ? 'selected' : ''); ?>>Materiales</option>
+                    </select>
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Cantidad</label>
-                        <input type="number" name="cantidad" value="<?php echo e(old('cantidad', $item->cantidad)); ?>" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300" min="0" required>
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Cantidad</label>
+                    <input type="number" name="cantidad" value="<?php echo e(old('cantidad', $item->cantidad)); ?>" min="0" required
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Ubicación</label>
-                        <input type="text" name="ubicacion" value="<?php echo e(old('ubicacion', $item->ubicacion)); ?>" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300">
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Ubicación</label>
+                    <input type="text" name="ubicacion" value="<?php echo e(old('ubicacion', $item->ubicacion)); ?>"
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Proveedor</label>
-                        <input type="text" name="proveedor" value="<?php echo e(old('proveedor', $item->proveedor)); ?>" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300">
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Proveedor</label>
+                    <input type="text" name="proveedor" value="<?php echo e(old('proveedor', $item->proveedor)); ?>"
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Fecha de vencimiento</label>
-                        <input type="date" name="fecha_vencimiento" value="<?php echo e(old('fecha_vencimiento', $item->fecha_vencimiento)); ?>" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300">
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Fecha de vencimiento</label>
+                    <input type="date" name="fecha_vencimiento" value="<?php echo e(old('fecha_vencimiento', $item->fecha_vencimiento)); ?>"
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div>
-                        <label class="block font-semibold text-gray-700 dark:text-gray-300">Umbral mínimo</label>
-                        <input type="number" name="umbral_minimo" value="<?php echo e(old('umbral_minimo', $item->umbral_minimo)); ?>" 
-                               class="mt-1 w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm p-2 focus:ring focus:ring-blue-300" min="1">
-                    </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Umbral mínimo</label>
+                    <input type="number" name="umbral_minimo" value="<?php echo e(old('umbral_minimo', $item->umbral_minimo)); ?>" min="1"
+                           class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
+                </div>
 
-                    <div class="flex justify-start gap-3">
-                        <button type="submit" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">
-                            Actualizar
-                        </button>
-                        <a href="<?php echo e(route('items.index')); ?>" 
-                           class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded shadow">
-                            Cancelar
-                        </a>
-                    </div>
-                </form>
-            </div>
+                <div class="flex justify-end gap-3">
+                    <button type="submit"
+                            class="bg-[#293a52] hover:bg-[#1e2c42] text-white font-semibold px-6 py-2 rounded-lg shadow-md transition">
+                        Actualizar
+                    </button>
+                    <a href="<?php echo e(route('items.index')); ?>"
+                       class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
  <?php echo $__env->renderComponent(); ?>

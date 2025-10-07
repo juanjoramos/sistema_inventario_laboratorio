@@ -14,14 +14,13 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L15 12 9.75 7v10z" />
             </svg>
             <h2 class="font-bold text-xl text-blue-800 dark:text-blue-300">
-                Bienvenido <?php echo e(auth()->user()->name); ?> 👨‍🏫
+                Bienvenido <?php echo e(auth()->user()->email); ?> 👨‍🏫
             </h2>
         </div>
      <?php $__env->endSlot(); ?>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <!-- Bienvenida -->
             <div class="bg-[#293a52] shadow-md sm:rounded-lg p-6">
                 <h1 class="text-2xl font-bold mb-2 text-white">Bienvenido Profesor 👨‍🏫</h1>
                 <p class="text-gray-300">
@@ -29,7 +28,54 @@
                 </p>
             </div>
 
-            <!-- Mis Reservas -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-lg shadow flex items-center justify-between">
+                    <p class="text-sm text-gray-600">Reservas activas</p>
+                    <p class="text-2xl font-bold text-[#293a52]"><?php echo e($reservas->whereIn('estado', ['pendiente', 'prestado'])->count()); ?></p>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow flex items-center justify-between">
+                    <p class="text-sm text-gray-600">Devueltas</p>
+                    <p class="text-2xl font-bold text-[#293a52]"><?php echo e($reservas->where('estado', 'devuelto')->count()); ?></p>
+                </div>
+                <div class="bg-white p-5 rounded-lg shadow flex items-center justify-between">
+                    <p class="text-sm text-gray-600">Canceladas</p>
+                    <p class="text-2xl font-bold text-[#293a52]"><?php echo e($reservas->where('estado', 'cancelado')->count()); ?></p>
+                </div>
+            </div>
+
+            <?php
+                $alerta = $reservas->where('estado', 'prestado')
+                            ->filter(fn($r) => \Carbon\Carbon::parse($r->fecha_devolucion_prevista)->isToday() || 
+                                               \Carbon\Carbon::parse($r->fecha_devolucion_prevista)->isTomorrow());
+            ?>
+
+            <?php if($alerta->count()): ?>
+                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded shadow">
+                    <p><strong>Atención:</strong> Tienes <?php echo e($alerta->count()); ?> reserva(s) que deben devolverse hoy o mañana.</p>
+                </div>
+            <?php endif; ?>
+
+            <form method="GET" action="<?php echo e(route('reservas.mis_reservas')); ?>" class="mb-4 flex flex-col sm:flex-row gap-4">
+                <input type="text" name="buscar" value="<?php echo e(request('buscar')); ?>" placeholder="Buscar ítem..." class="rounded px-4 py-2 w-full sm:w-1/3">
+
+                <select name="estado" class="rounded px-4 py-2 w-full sm:w-1/3">
+                    <option value="">Todos los estados</option>
+                    <option value="pendiente" <?php if(request('estado') === 'pendiente'): echo 'selected'; endif; ?>>Pendiente</option>
+                    <option value="prestado" <?php if(request('estado') === 'prestado'): echo 'selected'; endif; ?>>Prestado</option>
+                    <option value="cancelado" <?php if(request('estado') === 'cancelado'): echo 'selected'; endif; ?>>Cancelado</option>
+                    <option value="devuelto" <?php if(request('estado') === 'devuelto'): echo 'selected'; endif; ?>>Devuelto</option>
+                </select>
+
+                <button type="submit" class="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700">
+                    Filtrar
+                </button>
+
+                <a href="<?php echo e(route('reservas.mis_reservas')); ?>" 
+                   class="bg-gray-500 text-white rounded px-4 py-2 hover:bg-gray-600 text-center">
+                    Limpiar filtros
+                </a>
+            </form>
+
             <div class="bg-[#293a52] shadow-md sm:rounded-lg p-6">
                 <h3 class="text-lg font-bold mb-4 text-white">📋 Mis Reservas</h3>
 
@@ -55,8 +101,8 @@
                                     <td class="px-6 py-4 text-sm">
                                         <?php if($reserva->estado === 'pendiente'): ?>
                                             <span class="px-3 py-1 text-xs font-semibold text-yellow-800 bg-yellow-200 rounded-full">Pendiente</span>
-                                        <?php elseif($reserva->estado === 'entregado'): ?>
-                                            <span class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded-full">Entregado</span>
+                                        <?php elseif($reserva->estado === 'prestado'): ?>
+                                            <span class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded-full">Prestado</span>
                                         <?php elseif($reserva->estado === 'cancelado'): ?>
                                             <span class="px-3 py-1 text-xs font-semibold text-red-800 bg-red-200 rounded-full">Cancelado</span>
                                         <?php elseif($reserva->estado === 'devuelto'): ?>
@@ -66,7 +112,10 @@
                                         <?php endif; ?>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-100"><?php echo e($reserva->created_at->format('d/m/Y H:i')); ?></td>
-                                    <td class="px-6 py-4 text-sm text-gray-100"><?php echo e(\Carbon\Carbon::parse($reserva->fecha_devolucion_prevista)->format('d/m/Y')); ?></td>
+                                    <td class="px-6 py-4 text-sm text-gray-100">
+                                        <?php echo e(\Carbon\Carbon::parse($reserva->fecha_devolucion_prevista)->format('d/m/Y')); ?>
+
+                                    </td>
                                     <td class="px-6 py-4 text-sm text-gray-100 text-center">
                                         <?php if($reserva->estado === 'pendiente'): ?>
                                             <form action="<?php echo e(route('reservas.cancelar', $reserva)); ?>" method="POST" onsubmit="return confirm('¿Deseas cancelar esta reserva?');">

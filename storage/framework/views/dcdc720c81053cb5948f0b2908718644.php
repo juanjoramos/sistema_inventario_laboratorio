@@ -20,7 +20,6 @@
      <?php $__env->endSlot(); ?>
 
     <div class="p-6">
-        
         <?php if($errors->any()): ?>
             <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-sm">
                 <ul class="list-disc list-inside space-y-1">
@@ -34,7 +33,6 @@
         <form action="<?php echo e(route('users.store')); ?>" method="POST" class="bg-white p-6 rounded-lg shadow-md border border-gray-200 max-w-lg mx-auto">
             <?php echo csrf_field(); ?>
 
-            
             <div class="mb-4">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Nombre</label>
                 <input type="text" 
@@ -45,7 +43,6 @@
                        class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
             </div>
 
-            
             <div class="mb-4">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Correo institucional</label>
                 <input type="email" 
@@ -56,7 +53,6 @@
                        class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
             </div>
 
-            
             <div class="mb-4">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Contraseña</label>
                 <input type="password" 
@@ -66,7 +62,6 @@
                        class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
             </div>
 
-            
             <div class="mb-4">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Confirmar Contraseña</label>
                 <input type="password" 
@@ -76,7 +71,6 @@
                        class="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-[#293a52]">
             </div>
 
-            
             <div class="mb-4">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Asignar Roles</label>
                 <div class="space-y-2">
@@ -94,7 +88,6 @@
                 </div>
             </div>
 
-            
             <div class="flex justify-end">
                 <button type="submit" 
                         class="bg-[#293a52] hover:bg-[#1e2c42] text-white font-semibold px-6 py-2 rounded-lg shadow-md transition">
@@ -112,5 +105,4 @@
 <?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?>
-<?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/admin/users/create.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/admin/users/create.blade.php ENDPATH**/ ?>

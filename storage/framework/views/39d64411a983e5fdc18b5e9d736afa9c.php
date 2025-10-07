@@ -8,7 +8,7 @@
 <?php $attributes = $attributes->except(\App\View\Components\AppLayout::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-6xl mx-auto" x-data="{ openModalId: null }">
          <?php $__env->slot('header', null, []); ?> 
             <div class="bg-blue-100 dark:bg-blue-900 rounded-lg p-3 flex items-center gap-3 shadow-md">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -21,12 +21,26 @@
          <?php $__env->endSlot(); ?>
 
         <div class="mt-6">
-            <div class="bg-white border border-gray-200 shadow-md rounded-xl w-full p-4">
+            <div class="border border-gray-200 shadow-md rounded-xl w-full p-4" style="background-color:#293a52">
                 <div class="overflow-x-auto">
+                    <form method="GET" action="<?php echo e(route('admin.reservas.index')); ?>" class="mb-4 flex flex-wrap items-center gap-3">
+                        <input type="text" name="email" placeholder="Buscar por correo..."
+                            value="<?php echo e(request('email')); ?>"
+                            class="border border-gray-300 rounded px-4 py-2 w-full md:w-64 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow transition">
+                            🔍 Buscar
+                        </button>
+                        <a href="<?php echo e(route('admin.reservas.index')); ?>"
+                            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg shadow transition">
+                            Limpiar
+                        </a>
+                    </form>
+
                     <table class="w-full border border-gray-200 rounded-lg overflow-hidden">
-                        <thead>
-                            <tr class="bg-blue-50 text-blue-800 text-left">
-                                <th class="px-4 py-2 border-b">Usuario</th>
+                        <thead class="bg-blue-200 dark:bg-blue-800 text-gray-900 dark:text-white text-left">
+                            <tr>
+                                <th class="px-4 py-2 border-b">Correo</th>
                                 <th class="px-4 py-2 border-b">Ítem</th>
                                 <th class="px-4 py-2 border-b">Cantidad</th>
                                 <th class="px-4 py-2 border-b">Estado</th>
@@ -34,15 +48,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $__currentLoopData = $reservas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reserva): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <tr class="hover:bg-blue-50 transition">
-                                    <td class="px-4 py-2 border-b text-gray-700"><?php echo e($reserva->user->name); ?></td>
-                                    <td class="px-4 py-2 border-b text-gray-700"><?php echo e($reserva->item->nombre); ?></td>
-                                    <td class="px-4 py-2 border-b text-gray-700"><?php echo e($reserva->cantidad); ?></td>
+                            <?php $__empty_1 = true; $__currentLoopData = $reservas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reserva): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <tr class="hover:bg-[#1f2b3a] transition text-white">
+                                    <td class="px-4 py-2 border-b"><?php echo e($reserva->user->email); ?></td>
+                                    <td class="px-4 py-2 border-b"><?php echo e($reserva->item->nombre); ?></td>
+                                    <td class="px-4 py-2 border-b"><?php echo e($reserva->cantidad); ?></td>
                                     <td class="px-4 py-2 border-b">
                                         <span class="px-2 py-1 rounded text-sm
                                             <?php if($reserva->estado === 'pendiente'): ?> bg-yellow-100 text-yellow-700
-                                            <?php elseif($reserva->estado === 'entregado'): ?> bg-blue-100 text-blue-700
+                                            <?php elseif($reserva->estado === 'prestado'): ?> bg-blue-100 text-blue-700
                                             <?php elseif($reserva->estado === 'devuelto'): ?> bg-purple-100 text-purple-700
                                             <?php elseif($reserva->estado === 'cancelado'): ?> bg-red-100 text-red-700
                                             <?php else: ?> bg-gray-100 text-gray-700
@@ -66,11 +80,36 @@
                                                     <?php echo csrf_field(); ?> <?php echo method_field('PATCH'); ?>
                                                     <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition">Rechazar</button>
                                                 </form>
-                                            <?php elseif($reserva->estado === 'entregado'): ?>
-                                                <form action="<?php echo e(route('admin.reservas.devolver', $reserva)); ?>" method="POST" onsubmit="return confirm('¿Deseas devolver este ítem?');">
-                                                    <?php echo csrf_field(); ?> <?php echo method_field('PATCH'); ?>
-                                                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition">Devolver</button>
-                                                </form>
+                                            <?php elseif($reserva->estado === 'prestado'): ?>
+                                                <!-- Botón para mostrar modal -->
+                                                <button @click="openModalId = <?php echo e($reserva->id); ?>" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition">
+                                                    Devolver
+                                                </button>
+
+                                                <!-- Modal -->
+                                                <div x-show="openModalId === <?php echo e($reserva->id); ?>" x-cloak
+                                                    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                                                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+                                                        <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">Confirmar devolución</h2>
+                                                        <p class="text-gray-600 dark:text-gray-300">
+                                                            ¿Deseas marcar como <strong>devuelto</strong> el ítem <strong><?php echo e($reserva->item->nombre); ?></strong> reservado por <strong><?php echo e($reserva->user->email); ?></strong>?
+                                                        </p>
+                                                        <div class="mt-4 flex justify-end gap-3">
+                                                            <button @click="openModalId = null"
+                                                                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                                                                Cancelar
+                                                            </button>
+                                                            <form action="<?php echo e(route('admin.reservas.devolver', $reserva)); ?>" method="POST">
+                                                                <?php echo csrf_field(); ?> <?php echo method_field('PATCH'); ?>
+                                                                <button type="submit"
+                                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                                                                    Confirmar
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Fin Modal -->
                                             <?php else: ?>
                                                 <span class="text-gray-400 italic">Sin acción</span>
                                             <?php endif; ?>
@@ -84,11 +123,16 @@
                                         <?php endif; ?>
                                     </td>
                                 </tr>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-gray-300">No se encontraron reservas.</td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
-                    <div class="mt-4">
-                        <?php echo e($reservas->links()); ?>
+
+                    <div class="mt-4 text-white">
+                        <?php echo e($reservas->appends(request()->query())->links()); ?>
 
                     </div>
                 </div>
@@ -104,5 +148,4 @@
 <?php if (isset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54)): ?>
 <?php $component = $__componentOriginal9ac128a9029c0e4701924bd2d73d7f54; ?>
 <?php unset($__componentOriginal9ac128a9029c0e4701924bd2d73d7f54); ?>
-<?php endif; ?>
-<?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/reservas/index.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\Users\jramo\sistema_inventario_laboratorios\resources\views/reservas/index.blade.php ENDPATH**/ ?>

@@ -41,5 +41,4 @@ public function submit(Request $request)
             return redirect()->route('dashboard');
     }
 }
-
 }

@@ -71,20 +71,20 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-white">
-                                    @foreach ($transacciones as $t)
-                                        <tr>
-                                            <td class="px-4 py-2">{{ $t->created_at->format('d/m/Y H:i') }}</td>
-                                            <td class="px-4 py-2 capitalize">{{ $t->tipo }}</td>
-                                            <td class="px-4 py-2">{{ $t->cantidad }}</td>
-                                            <td class="px-4 py-2">
-                                                @if($t->usuario)
-                                                    Prestado por {{ $t->usuario->email }}
-                                                @else
-                                                    {{ $t->descripcion }}
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                @foreach ($transacciones as $t)
+                                    <tr>
+                                        <td class="px-4 py-2">{{ $t->created_at->format('d/m/Y H:i') }}</td>
+                                        <td class="px-4 py-2 capitalize">{{ $t->tipo }}</td>
+                                        <td class="px-4 py-2">{{ $t->cantidad }}</td>
+                                        <td class="px-4 py-2">
+                                            @if($t->user)
+                                                Préstamo por usuario {{ $t->user->email }}
+                                            @else
+                                                {{ $t->descripcion ?? 'Usuario eliminado' }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -128,7 +128,7 @@
                                             <td class="px-4 py-2">
                                                 @switch($reserva->estado)
                                                     @case('pendiente') <span class="text-yellow-400">Pendiente</span> @break
-                                                    @case('entregado')  <span class="text-blue-400">Entregado</span> @break
+                                                    @case('prestado')  <span class="text-blue-400">Prestado</span> @break
                                                     @case('devuelto')  <span class="text-green-500">Devuelto</span> @break
                                                     @case('cancelado') <span class="text-red-500">Cancelado</span> @break
                                                     @default <span class="text-gray-400">{{ $reserva->estado }}</span>
@@ -227,7 +227,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('alertasChart').getContext('2d');
             new Chart(ctx, {
-                type: 'doughnut', // bar grafico de barras o doughnut grafico circular
+                type: 'bar', // bar grafico de barras o doughnut grafico circular
                 data: {
                     labels: ['Pendientes', 'Atendidas'],
                     datasets: [{
